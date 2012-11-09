@@ -91,7 +91,7 @@ def checker():
         sys.stdout.flush()
         try:
             proc = subprocess.Popen(
-                ('pylin %s' % python_file).split(),
+                ('pylint %s' % python_file).split(),
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE)
             out, _ = proc.communicate()
@@ -113,7 +113,7 @@ def checker():
             exit_code = 1
 
         # Add some output
-        print '%.1f/10.0\t%s' % (score, status)
+        print '%.2f/10.00\t%s' % (score, status)
 
     sys.exit(exit_code)
 
