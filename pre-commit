@@ -21,7 +21,7 @@ LICENSE:
 #
 #######################################
 
-# The lowest allowed score
+# The lowest allowed score (should be a float between 0.00 and 10.00)
 LIMIT = 8.0
 
 #######################################
@@ -106,7 +106,7 @@ def checker():
                 score = float(match.group(1))
 
         # Verify the score
-        if score >= LIMIT:
+        if score >= float(LIMIT):
             status = 'PASSED'
         else:
             status = 'FAILED'
