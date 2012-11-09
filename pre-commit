@@ -1,0 +1,123 @@
+#!/usr/bin/env python
+
+"""
+Git pre-commit hook for checking Python code quality. The hook requires pylint
+to check the code quality.
+
+AUTHOR:
+    Sebastian Dahlgren <sebastian.dahlgren@gmail.com>
+
+VERSION:
+    0.1
+
+LICENSE:
+    Apache License 2.0
+    http://www.apache.org/licenses/LICENSE-2.0.html
+"""
+
+#######################################
+#
+# CONFIGURATION
+#
+#######################################
+
+# The lowest allowed score
+LIMIT = 8.0
+
+#######################################
+#
+# CODE BELOW
+#
+#######################################
+
+import re
+import sys
+import subprocess
+
+
+def get_list_of_committed_files():
+    """
+    Returns a list of files about to be commited.
+    """
+    files = []
+    output = subprocess.check_output(
+        'git diff-index --name-only --cached HEAD'.split())
+    for result in output.split('\n'):
+        if result != '':
+            files.append(result)
+
+    return files
+
+
+def checker():
+    """
+    Main function doing the checks
+    """
+    # List of checked files and their results
+    python_files = []
+
+    # Set the exit code
+    exit_code = 0
+
+    # Find Python files
+    for filename in get_list_of_committed_files():
+        # Check the file extension
+        if filename[-3:] == '.py':
+            python_files.append((filename, None))
+            break
+
+        # Check for python in shebang
+        with open(filename, 'r') as file_handle:
+            first_line = file_handle.readline()
+        if 'python' in first_line:
+            python_files.append((filename, None))
+
+    # Don't do anything if there are no Python files
+    if len(python_files) == 0:
+        sys.exit(0)
+
+    # Pylint Python files
+    print "LINTING PYTHON CODE"
+    print "---------------------------"
+    i = 1
+    regexp = re.compile(r'^Your\ code\ has\ been\ rated\ at\ ([0-9\.]+)/10')
+    for python_file, score in python_files:
+        # Set the initial score
+        score = 0.00
+
+        # Start pylinting
+        sys.stdout.write("Running pylint on %s (file %i/%i)..\t" % (
+            python_file, i, len(python_files)))
+        sys.stdout.flush()
+        try:
+            proc = subprocess.Popen(
+                ('pylin %s' % python_file).split(),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE)
+            out, _ = proc.communicate()
+        except OSError:
+            print "\nAn error occurred. Is pylint installed?"
+            sys.exit(1)
+
+        # Check for the result
+        for line in out.split('\n'):
+            match = re.match(regexp, line)
+            if match:
+                score = float(match.group(1))
+
+        # Verify the score
+        if score >= LIMIT:
+            status = 'PASSED'
+        else:
+            status = 'FAILED'
+            exit_code = 1
+
+        # Add some output
+        print '%.1f/10.0\t%s' % (score, status)
+
+    sys.exit(exit_code)
+
+if __name__ == '__main__':
+    checker()
+
+sys.exit(1)
