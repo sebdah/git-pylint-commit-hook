@@ -40,6 +40,7 @@ def get_list_of_committed_files():
     Returns a list of files about to be commited.
     """
     files = []
+    # pylint: disable=E1103
     output = subprocess.check_output(
         'git diff-index --name-only --cached HEAD'.split())
     for result in output.split('\n'):
@@ -77,8 +78,6 @@ def checker():
         sys.exit(0)
 
     # Pylint Python files
-    print "LINTING PYTHON CODE"
-    print "---------------------------"
     i = 1
     regexp = re.compile(r'^Your\ code\ has\ been\ rated\ at\ ([0-9\.]+)/10')
     for python_file, score in python_files:
@@ -100,6 +99,7 @@ def checker():
             sys.exit(1)
 
         # Check for the result
+        # pylint: disable=E1103
         for line in out.split('\n'):
             match = re.match(regexp, line)
             if match:
