@@ -8,7 +8,7 @@ AUTHOR:
     Sebastian Dahlgren <sebastian.dahlgren@gmail.com>
 
 VERSION:
-    0.1
+    0.2
 
 LICENSE:
     Apache License 2.0
@@ -68,10 +68,13 @@ def checker():
             break
 
         # Check for python in shebang
-        with open(filename, 'r') as file_handle:
-            first_line = file_handle.readline()
-        if 'python' in first_line:
-            python_files.append((filename, None))
+        try:
+            with open(filename, 'r') as file_handle:
+                first_line = file_handle.readline()
+            if 'python' in first_line:
+                python_files.append((filename, None))
+        except IOError:
+            print 'File not found (probably deleted): %s\t\tSKIPPED' % filename
 
     # Don't do anything if there are no Python files
     if len(python_files) == 0:
