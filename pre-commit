@@ -69,7 +69,7 @@ def checker():
         # Check for python in shebang
         with open(filename, 'r') as file_handle:
             first_line = file_handle.readline()
-        if 'python' in first_line:
+        if 'python' in first_line and '#!' in first_line:
             python_files.append((filename, None))
 
     # Don't do anything if there are no Python files
