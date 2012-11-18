@@ -1,7 +1,7 @@
 git-pylint-commit-hook
 ======================
 
-<img src='https://secure.travis-ci.org/sebdah/git-pylint-commit-hook.png?branch=master'>
+<a href='https://travis-ci.org/sebdah/git-pylint-commit-hook'><img src='https://secure.travis-ci.org/sebdah/git-pylint-commit-hook.png?branch=master'></a>
 
 Pre-commit hook for Git checking Python code quality. The hook will check files ending with `.py` or that has a she bang containing `python`.
 
