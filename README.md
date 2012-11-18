@@ -1,6 +1,8 @@
 git-pylint-commit-hook
 ======================
 
+.. image:: https://secure.travis-ci.org/sebdah/git-pylint-commit-hook.png?branch=master
+
 Pre-commit hook for Git checking Python code quality. The hook will check files ending with `.py` or that has a she bang containing `python`.
 
 Set the threshold for the quality by updating the `LIMIT` value in the `pre-commit` hook.
