@@ -19,3 +19,18 @@ This commit hook is written in Python and has the following requirements:
 
 - [pylint](http://www.logilab.org/857)
 - Python >2.5
+
+Release notes
+-------------
+
+### 0.3 (2012-11-18)
+
+- Fixed bug with non-python files getting checked, if they contained `python` on the first row
+
+### 0.2 (2012-11-16)
+
+- Added support for handling moved or deleted files
+
+### 0.1 (2012-11-09)
+
+ - Initial release of the commit hook
