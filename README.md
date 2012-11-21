@@ -26,7 +26,7 @@ Requirements
 
 This commit hook is written in Python and has the following requirements:
 
-- [pylint](http://www.logilab.org/857)
+- [pylint](http://www.logilab.org/857) (`sudo pip install pylint`)
 - Python >2.5
 
 
