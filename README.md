@@ -14,6 +14,13 @@ Download the hook (or just copy it from GitHub) and save it in your Git repo as 
 
 Don't forget to make it executable.
 
+
+Usage
+------
+
+The commit hook will automatically be called when you are running `git commit`. If you want to skip the tests for a certain commit, use the `-n` flag, `git commit -n`.  
+
+
 Requirements
 ------------
 
@@ -21,6 +28,7 @@ This commit hook is written in Python and has the following requirements:
 
 - [pylint](http://www.logilab.org/857)
 - Python >2.5
+
 
 Release notes
 -------------
