@@ -33,6 +33,10 @@ This commit hook is written in Python and has the following requirements:
 Release notes
 -------------
 
+### 0.4 (2012-11-30)
+
+- Fixed bug [#1 Files parsed number is not increased](https://github.com/sebdah/git-pylint-commit-hook/issues/1)
+
 ### 0.3 (2012-11-18)
 
 - Fixed bug with non-python files getting checked, if they contained `python` on the first row
