@@ -117,6 +117,9 @@ def checker():
         # Add some output
         print '%.2f/10.00\t%s' % (score, status)
 
+        # Bump parsed files
+        i+=1
+
     sys.exit(exit_code)
 
 if __name__ == '__main__':
