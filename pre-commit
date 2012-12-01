@@ -65,7 +65,7 @@ def checker():
         # Check the file extension
         if filename[-3:] == '.py':
             python_files.append((filename, None))
-            break
+            continue
 
         try:
             with open(filename, 'r') as file_handle:
