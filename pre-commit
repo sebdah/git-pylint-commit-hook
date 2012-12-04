@@ -8,7 +8,7 @@ AUTHOR:
     Sebastian Dahlgren <sebastian.dahlgren@gmail.com>
 
 VERSION:
-    0.5
+    0.6
 
 LICENSE:
     Apache License 2.0
@@ -30,6 +30,7 @@ LIMIT = 8.0
 #
 #######################################
 
+import os
 import re
 import sys
 import subprocess
@@ -67,6 +68,7 @@ def checker():
             python_files.append((filename, None))
             continue
 
+        # Check the first line for a python shebang
         try:
             with open(filename, 'r') as file_handle:
                 first_line = file_handle.readline()
@@ -83,6 +85,16 @@ def checker():
     i = 1
     regexp = re.compile(r'^Your\ code\ has\ been\ rated\ at\ ([0-9\.]+)/10')
     for python_file, score in python_files:
+        # Allow __init__.py files to be completely empty
+        if os.path.basename(python_file) == '__init__.py':
+            if os.stat('__init__.py').st_size == 0:
+                print 'Skipping pylint on %s (empty __init__.py)..\tSKIPPED' % (
+                    python_file)
+
+                # Bump parsed files
+                i += 1
+                continue
+
         # Set the initial score
         score = 0.00
 
