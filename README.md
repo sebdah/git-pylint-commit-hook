@@ -33,6 +33,10 @@ This commit hook is written in Python and has the following requirements:
 Release notes
 -------------
 
+### 0.6 (2012-12-04)
+
+- Fixed bug [#3 Empty .py files fails according to pylint](https://github.com/sebdah/git-pylint-commit-hook/issues/3)
+
 ### 0.5 (2012-12-01)
 
 - Fixed bug [#2 Hook missed some Python files when committing a mixture of file types](https://github.com/sebdah/git-pylint-commit-hook/issues/2)
