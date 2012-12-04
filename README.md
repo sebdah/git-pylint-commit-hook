@@ -36,6 +36,7 @@ Release notes
 ### 0.6 (2012-12-04)
 
 - Fixed bug [#3 Empty .py files fails according to pylint](https://github.com/sebdah/git-pylint-commit-hook/issues/3)
+- Added support for [negative points #4](https://github.com/sebdah/git-pylint-commit-hook/issues/4)
 
 ### 0.5 (2012-12-01)
 

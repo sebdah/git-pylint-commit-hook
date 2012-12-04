@@ -83,7 +83,7 @@ def checker():
 
     # Pylint Python files
     i = 1
-    regexp = re.compile(r'^Your\ code\ has\ been\ rated\ at\ ([0-9\.]+)/10')
+    regexp = re.compile(r'^Your\ code\ has\ been\ rated\ at\ (\-?[0-9\.]+)/10')
     for python_file, score in python_files:
         # Allow __init__.py files to be completely empty
         if os.path.basename(python_file) == '__init__.py':
