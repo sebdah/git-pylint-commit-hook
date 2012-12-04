@@ -24,6 +24,11 @@ LICENSE:
 # The lowest allowed score (should be a float between 0.00 and 10.00)
 LIMIT = 8.0
 
+# Custom pylint command line parameters. See pylint --help for more info
+# E.g.
+# PYLINT_PARAMS = '--rcfile=/path/to/project/pylint.rc'
+PYLINT_PARAMS = ''
+
 #######################################
 #
 # CODE BELOW
@@ -103,8 +108,13 @@ def checker():
             python_file, i, len(python_files)))
         sys.stdout.flush()
         try:
+            if PYLINT_PARAMS:
+                # Use without extra config file
+                command = 'pylint %s' % python_file
+            else:
+                command = 'pylint %s %s' % (PYLINT_PARAMS, python_file)
             proc = subprocess.Popen(
-                ('pylint %s' % python_file).split(),
+                command.split(),
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE)
             out, _ = proc.communicate()

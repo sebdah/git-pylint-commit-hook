@@ -18,7 +18,19 @@ Don't forget to make it executable.
 Usage
 ------
 
-The commit hook will automatically be called when you are running `git commit`. If you want to skip the tests for a certain commit, use the `-n` flag, `git commit -n`.  
+The commit hook will automatically be called when you are running `git commit`. If you want to skip the tests for a certain commit, use the `-n` flag, `git commit -n`.
+
+### Setting score limit
+
+Open the `pre-commit` script and update the `LIMIT` value according to your needs. E.g.
+
+	LIMIT = 8.0
+
+### Custom `pylint` command line options
+
+The hook supports custom command line options to be specified. Those can be added to the `PYLINT_PARAMS` inside the `pre-commit` script. E.g.
+
+	PYLINT_PARAMS = '--rcfile=/path/to/project/pylint.rc'
 
 
 Requirements
