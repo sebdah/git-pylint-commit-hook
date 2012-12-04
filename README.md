@@ -18,7 +18,19 @@ Don't forget to make it executable.
 Usage
 ------
 
-The commit hook will automatically be called when you are running `git commit`. If you want to skip the tests for a certain commit, use the `-n` flag, `git commit -n`.  
+The commit hook will automatically be called when you are running `git commit`. If you want to skip the tests for a certain commit, use the `-n` flag, `git commit -n`.
+
+### Setting score limit
+
+Open the `pre-commit` script and update the `LIMIT` value according to your needs. E.g.
+
+	LIMIT = 8.0
+
+### Custom `pylint` command line options
+
+The hook supports custom command line options to be specified. Those can be added to the `PYLINT_PARAMS` inside the `pre-commit` script. E.g.
+
+	PYLINT_PARAMS = '--rcfile=/path/to/project/pylint.rc'
 
 
 Requirements
@@ -32,6 +44,11 @@ This commit hook is written in Python and has the following requirements:
 
 Release notes
 -------------
+
+### 0.6 (2012-12-04)
+
+- Fixed bug [#3 Empty .py files fails according to pylint](https://github.com/sebdah/git-pylint-commit-hook/issues/3)
+- Added support for [negative points #4](https://github.com/sebdah/git-pylint-commit-hook/issues/4)
 
 ### 0.5 (2012-12-01)
 
