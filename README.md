@@ -45,6 +45,10 @@ This commit hook is written in Python and has the following requirements:
 Release notes
 -------------
 
+### 0.7 (2012-12-07)
+
+- Bug when skipping __init__.py files fixed. Wrong path was checked under some circumstanses
+
 ### 0.6 (2012-12-04)
 
 - Added support for [negative pylint scores #4](https://github.com/sebdah/git-pylint-commit-hook/issues/4)
