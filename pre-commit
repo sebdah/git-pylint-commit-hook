@@ -40,7 +40,6 @@ import re
 import sys
 import subprocess
 
-
 def get_list_of_committed_files():
     """
     Returns a list of files about to be commited.
@@ -55,16 +54,10 @@ def get_list_of_committed_files():
 
     return files
 
+def get_python_files():
+    '''Return only python files'''
 
-def checker():
-    """
-    Main function doing the checks
-    """
-    # List of checked files and their results
     python_files = []
-
-    # Set the exit code
-    exit_code = 0
 
     # Find Python files
     for filename in get_list_of_committed_files():
@@ -81,6 +74,18 @@ def checker():
                 python_files.append((filename, None))
         except IOError:
             print 'File not found (probably deleted): %s\t\tSKIPPED' % filename
+
+    return python_files
+
+def checker():
+    """
+    Main function doing the checks
+    """
+
+    python_files = get_python_files()
+
+    # Set the exit code
+    exit_code = 0
 
     # Don't do anything if there are no Python files
     if len(python_files) == 0:
@@ -144,7 +149,15 @@ def checker():
 
     sys.exit(exit_code)
 
+def autopep8():
+    '''To be compliant pep8'''
+
+    for filename, nil in get_python_files():
+        print "Autopep8 work on " + filename
+        subprocess.Popen([r"autopep8", "-i", filename])
+
 if __name__ == '__main__':
+    autopep8()
     checker()
 
 sys.exit(1)
