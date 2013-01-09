@@ -94,7 +94,7 @@ def checker():
     for python_file, score in python_files:
         # Allow __init__.py files to be completely empty
         if os.path.basename(python_file) == '__init__.py':
-            if os.stat('__init__.py').st_size == 0:
+            if os.stat(python_file).st_size == 0:
                 print 'Skipping pylint on %s (empty __init__.py)..\tSKIPPED' % (
                     python_file)
 
