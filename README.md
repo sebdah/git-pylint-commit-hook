@@ -45,6 +45,10 @@ This commit hook is written in Python and has the following requirements:
 Release notes
 -------------
 
+### 0.8 (2013-01-09)
+
+- Fixed bug [#9 Old file names of moved files are checked](https://github.com/sebdah/git-pylint-commit-hook/issues/9)
+
 ### 0.7 (2012-12-07)
 
 - Bug when skipping __init__.py files fixed. Wrong path was checked under some circumstanses
