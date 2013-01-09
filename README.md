@@ -45,6 +45,10 @@ This commit hook is written in Python and has the following requirements:
 Release notes
 -------------
 
+### 0.7 (2013-01-09)
+
+- Fixed bug [#9 Old file names of moved files are checked](https://github.com/sebdah/git-pylint-commit-hook/issues/9)
+
 ### 0.6 (2012-12-04)
 
 - Added support for [negative pylint scores #4](https://github.com/sebdah/git-pylint-commit-hook/issues/4)
