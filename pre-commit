@@ -48,10 +48,12 @@ def get_list_of_committed_files():
     files = []
     # pylint: disable=E1103
     output = subprocess.check_output(
-        'git diff-index --name-only --cached HEAD'.split())
+        'git diff-index --cached HEAD'.split())
     for result in output.split('\n'):
         if result != '':
-            files.append(result)
+            result = result.split()
+            if result[4] in ['A', 'M']:
+                files.append(result[5])
 
     return files
 
