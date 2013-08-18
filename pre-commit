@@ -8,7 +8,7 @@ AUTHOR:
     Sebastian Dahlgren <sebastian.dahlgren@gmail.com>
 
 VERSION:
-    0.8
+    0.8.1
 
 LICENSE:
     Apache License 2.0
@@ -110,7 +110,7 @@ def checker():
             python_file, i, len(python_files)))
         sys.stdout.flush()
         try:
-            if PYLINT_PARAMS:
+            if not PYLINT_PARAMS:
                 # Use without extra config file
                 command = 'pylint %s' % python_file
             else:
