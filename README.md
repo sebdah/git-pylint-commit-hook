@@ -3,9 +3,9 @@ git-pylint-commit-hook
 
 <a href='https://travis-ci.org/sebdah/git-pylint-commit-hook'><img src='https://secure.travis-ci.org/sebdah/git-pylint-commit-hook.png?branch=master'></a>
 
-Pre-commit hook for Git checking Python code quality. The hook will check files ending with `.py` or that has a she bang containing `python`.
+Pre-commit hook for Git checking Python code quality. The hook will check files ending with `.py` or that has a she bang (#!) containing `python`.
 
-Set the threshold for the quality by updating the `LIMIT` value in the `pre-commit` hook.
+By default the script looks in the root directory of your project for a .pylintrc file, which it passes to pylint.  It also looks for a [pre-commit-hook] section for options of it's own.
 
 Installation
 ------------
@@ -20,18 +20,22 @@ Usage
 
 The commit hook will automatically be called when you are running `git commit`. If you want to skip the tests for a certain commit, use the `-n` flag, `git commit -n`.
 
-### Setting score limit
+### Configuration
 
-Open the `pre-commit` script and update the `LIMIT` value according to your needs. E.g.
+Settings are loaded by default from the .pylintrc file in the root of your repo.
 
-	LIMIT = 8.0
+    [pre-commit-hook]
+    command=custom_pylint
+    params=--rcfile=/path/to/another/pylint.rc
+    limit=8.0
 
-### Custom `pylint` command line options
+_command_ is for the actual command, for instance if pylint is not installed globally, but is in a virtualenv inside the project itself.
 
-The hook supports custom command line options to be specified. Those can be added to the `PYLINT_PARAMS` inside the `pre-commit` script. E.g.
+_params_ lets you pass custom parameters to pylint
 
-	PYLINT_PARAMS = '--rcfile=/path/to/project/pylint.rc'
+_limit_ is the lowest value which you want to allow for a pylint score.  Any lower than this, and the script will fail and won't commit.
 
+Any of these can be bypassed directly in the pre-commit hook itself.  You can also set a different default place to look for the pylintrc file.
 
 Requirements
 ------------
@@ -44,6 +48,10 @@ This commit hook is written in Python and has the following requirements:
 
 Release notes
 -------------
+
+### 1.0.0 (2013-10-13)
+
+- Added support for default .pylintrc file, and also for loading our own options from there.
 
 ### 0.8 (2013-01-09)
 
