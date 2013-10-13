@@ -49,7 +49,7 @@ This commit hook is written in Python and has the following requirements:
 Release notes
 -------------
 
-### 1.0 (2013-10-13)
+### 1.0.0 (2013-10-13)
 
 - Added support for default .pylintrc file, and also for loading our own options from there.
 
