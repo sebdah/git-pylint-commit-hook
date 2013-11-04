@@ -47,10 +47,9 @@ import sys
 import subprocess
 import ConfigParser
 
+
 def get_list_of_committed_files():
-    """
-    Returns a list of files about to be commited.
-    """
+    """ Returns a list of files about to be commited. """
     files = []
     # pylint: disable=E1103
     output = subprocess.check_output(
@@ -65,9 +64,7 @@ def get_list_of_committed_files():
 
 
 def checker():
-    """
-    Main function doing the checks
-    """
+    """ Main function doing the checks """
     global PYLINT, PYLINT_PARAMS, LIMIT
 
     # List of checked files and their results
@@ -115,8 +112,9 @@ def checker():
         # Allow __init__.py files to be completely empty
         if os.path.basename(python_file) == '__init__.py':
             if os.stat(python_file).st_size == 0:
-                print 'Skipping pylint on %s (empty __init__.py)..\tSKIPPED' % (
-                    python_file)
+                print(
+                    'Skipping pylint on %s (empty __init__.py)..\tSKIPPED' % (
+                        python_file))
 
                 # Bump parsed files
                 i += 1
@@ -146,7 +144,7 @@ def checker():
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE)
             out, _ = proc.communicate()
-        except OSError as err:
+        except OSError:
             print "\nAn error occurred. Is pylint installed?"
             sys.exit(1)
 
