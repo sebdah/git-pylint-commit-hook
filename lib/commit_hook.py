@@ -1,18 +1,5 @@
-#!/usr/bin/env python
+""" Commit hook for pylint """
 
-"""
-Git pre-commit hook for checking Python code quality. The hook requires pylint
-to check the code quality.
-
-AUTHOR:
-    Sebastian Dahlgren <sebastian.dahlgren@gmail.com>
-
-LICENSE:
-    Apache License 2.0
-    http://www.apache.org/licenses/LICENSE-2.0.html
-"""
-
-import argparse
 import os
 import re
 import sys
@@ -20,35 +7,7 @@ import subprocess
 import ConfigParser
 
 
-def main():
-    """ Main function handling configuration files etc """
-    parser = argparse.ArgumentParser(
-        description='Git pylint commit hook')
-    parser.add_argument(
-        '--limit',
-        default=8.0,
-        type=float,
-        help=(
-            'Score limit, files with a lower score will stop the '
-            'commit. Default: 8.0'))
-    parser.add_argument(
-        '--pylint',
-        default='pylint',
-        help='Path to pylint executable. Default: pylint')
-    parser.add_argument(
-        '--pylintrc',
-        default='.pylintrc',
-        help=(
-            'Path to pylintrc file. Options in the pylintrc will '
-            'override the command line parameters. Default: .pylintrc'))
-    parser.add_argument(
-        '--pylint-params',
-        help='Custom pylint parameters to add to the pylint command')
-    args = parser.parse_args()
-    checker(args.limit, args.pylint, args.pylintrc, args.pylint_params)
-
-
-def get_list_of_committed_files():
+def _get_list_of_committed_files():
     """ Returns a list of files about to be commited. """
     files = []
     # pylint: disable=E1103
@@ -63,7 +22,8 @@ def get_list_of_committed_files():
     return files
 
 
-def checker(limit, pylint='pylint', pylintrc='.pylintrc', pylint_params=None):
+def check_repo(
+        limit, pylint='pylint', pylintrc='.pylintrc', pylint_params=None):
     """ Main function doing the checks
 
     :type limit: float
@@ -79,10 +39,10 @@ def checker(limit, pylint='pylint', pylintrc='.pylintrc', pylint_params=None):
     python_files = []
 
     # Set the exit code
-    exit_code = 0
+    all_filed_passed = True
 
     # Find Python files
-    for filename in get_list_of_committed_files():
+    for filename in _get_list_of_committed_files():
         # Check the file extension
         if filename[-3:] == '.py':
             python_files.append((filename, None))
@@ -167,7 +127,7 @@ def checker(limit, pylint='pylint', pylintrc='.pylintrc', pylint_params=None):
             status = 'PASSED'
         else:
             status = 'FAILED'
-            exit_code = 1
+            all_filed_passed = False
 
         # Add some output
         print('{:.2}/10.00\t{}'.format(score, status))
@@ -175,10 +135,4 @@ def checker(limit, pylint='pylint', pylintrc='.pylintrc', pylint_params=None):
         # Bump parsed files
         i += 1
 
-    sys.exit(exit_code)
-
-if __name__ == '__main__':
-    main()
-    sys.exit(0)
-
-sys.exit(1)
+    return all_filed_passed
