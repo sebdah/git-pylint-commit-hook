@@ -18,7 +18,7 @@ setup(
     keywords="git commit pre-commit hook pylint python",
     platforms=['Any'],
     packages=['lib'],
-    scripts=['cumulus'],
+    scripts=['git-pylint-commit-hook'],
     include_package_data=True,
     zip_safe=False,
     install_requires=[],
