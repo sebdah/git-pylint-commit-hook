@@ -10,6 +10,13 @@ To use ``git-pylint-commit-hook`` in a project, create a new file under ``/proje
     #!/usr/bin/env bash
     git-pylint-commit-hook
 
+Save the file and make it executable:
+::
+
+    chmod +x .git/hooks/pre-commit
+
+Your Python files should now be checked upon commit.
+
 
 Command line options
 --------------------
