@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# git-pyliny-commit-hook documentation build configuration file, created by
+# git-pylint-commit-hook documentation build configuration file, created by
 # sphinx-quickstart on Fri Dec  6 12:58:30 2013.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -40,7 +40,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'git-pyliny-commit-hook'
+project = u'git-pylint-commit-hook'
 copyright = u'2013, Sebastian Dahlgren'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -164,7 +164,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'git-pyliny-commit-hookdoc'
+htmlhelp_basename = 'git-pylint-commit-hookdoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -183,7 +183,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'git-pyliny-commit-hook.tex', u'git-pyliny-commit-hook Documentation',
+  ('index', 'git-pylint-commit-hook.tex', u'git-pylint-commit-hook Documentation',
    u'Sebastian Dahlgren', 'manual'),
 ]
 
@@ -213,7 +213,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'git-pyliny-commit-hook', u'git-pyliny-commit-hook Documentation',
+    ('index', 'git-pylint-commit-hook', u'git-pylint-commit-hook Documentation',
      [u'Sebastian Dahlgren'], 1)
 ]
 
@@ -227,8 +227,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'git-pyliny-commit-hook', u'git-pyliny-commit-hook Documentation',
-   u'Sebastian Dahlgren', 'git-pyliny-commit-hook', 'One line description of project.',
+  ('index', 'git-pylint-commit-hook', u'git-pylint-commit-hook Documentation',
+   u'Sebastian Dahlgren', 'git-pylint-commit-hook', 'One line description of project.',
    'Miscellaneous'),
 ]
 
