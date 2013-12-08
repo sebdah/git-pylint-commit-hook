@@ -13,9 +13,16 @@ LICENSE:
 """
 
 import argparse
+import os
 import sys
+from ConfigParser import SafeConfigParser
 
-from lib import commit_hook
+settings = SafeConfigParser()
+settings.read(os.path.join(
+    os.path.dirname(os.path.realpath(__file__)),
+    'git_pylint_commit_hook/settings.conf'))
+
+from git_pylint_commit_hook import commit_hook
 
 
 def main():
@@ -42,7 +49,16 @@ def main():
     parser.add_argument(
         '--pylint-params',
         help='Custom pylint parameters to add to the pylint command')
+    parser.add_argument(
+        '--version',
+        action='store_true',
+        help='Print current version number')
     args = parser.parse_args()
+
+    if args.version:
+        print('git-pylint-commit-hook version {}'.format(
+            settings.get('general', 'version')))
+        sys.exit(0)
 
     result = commit_hook.check_repo(
         args.limit, args.pylint, args.pylintrc, args.pylint_params)
