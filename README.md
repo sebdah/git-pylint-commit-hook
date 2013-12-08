@@ -49,6 +49,13 @@ This commit hook is written in Python and has the following requirements:
 Release notes
 -------------
 
+### 2.0.0 (2013-12-08)
+
+- Documentation updated and moved to [Read The Docs](http://git-pylint-commit-hook.readthedocs.org/)
+- `git-pylint-commit-hook` is now a regular command
+- Installation via PyPI: `pip install git-pylint-commit-hook`
+- Configurable using command line parameters. See the [documentation](http://git-pylint-commit-hook.readthedocs.org/) for details
+
 ### 1.0.0 (2013-10-13)
 
 - Added support for default .pylintrc file, and also for loading our own options from there.
