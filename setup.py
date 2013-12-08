@@ -4,7 +4,7 @@ from setuptools import setup
 from ConfigParser import SafeConfigParser
 
 settings = SafeConfigParser()
-settings.read(os.path.realpath('lib/settings.conf'))
+settings.read(os.path.realpath('git_pylint_commit_hook/settings.conf'))
 
 
 setup(
@@ -17,7 +17,7 @@ setup(
     url='http://www.sebastiandahlgren.se',
     keywords="git commit pre-commit hook pylint python",
     platforms=['Any'],
-    packages=['lib'],
+    packages=['git_pylint_commit_hook'],
     scripts=['git-pylint-commit-hook'],
     include_package_data=True,
     zip_safe=False,
