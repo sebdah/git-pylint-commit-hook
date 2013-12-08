@@ -10,7 +10,7 @@ settings.read(os.path.realpath('lib/settings.conf'))
 setup(
     name='git-pylint-commit-hook',
     version=settings.get('general', 'version'),
-    license='Proprietary',
+    license='Apache License, Version 2.0',
     description='Git commit hook that checks Python files with pylint',
     author='Sebastian Dahlgren',
     author_email='sebastian.dahlgren@gmail.com',
@@ -25,7 +25,7 @@ setup(
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',
-        'License :: Other/Proprietary License',
+        'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
         'Programming Language :: Python'
     ]
