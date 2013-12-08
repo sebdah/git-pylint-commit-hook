@@ -1,0 +1,3 @@
+recursive-include lib *
+include cumulus
+include README

@@ -1,45 +1,4 @@
-#!/usr/bin/env python
-
-"""
-Git pre-commit hook for checking Python code quality. The hook requires pylint
-to check the code quality.
-
-AUTHOR:
-    Sebastian Dahlgren <sebastian.dahlgren@gmail.com>
-
-VERSION:
-    1.0.0
-
-LICENSE:
-    Apache License 2.0
-    http://www.apache.org/licenses/LICENSE-2.0.html
-"""
-
-#######################################
-#
-# CONFIGURATION
-#
-#######################################
-
-# The lowest allowed score (should be a float between 0.00 and 10.00)
-LIMIT = 8.0
-
-# pylint command to run
-PYLINT = 'pylint'
-
-# where to look for options
-PYLINTRC = '.pylintrc'
-
-# Custom pylint command line parameters. See pylint --help for more info
-# E.g.
-# PYLINT_PARAMS = '--rcfile=/path/to/project/pylint.rc'
-PYLINT_PARAMS = ''
-
-#######################################
-#
-# CODE BELOW
-#
-#######################################
+""" Commit hook for pylint """
 
 import os
 import re
@@ -47,10 +6,9 @@ import sys
 import subprocess
 import ConfigParser
 
-def get_list_of_committed_files():
-    """
-    Returns a list of files about to be commited.
-    """
+
+def _get_list_of_committed_files():
+    """ Returns a list of files about to be commited. """
     files = []
     # pylint: disable=E1103
     output = subprocess.check_output(
@@ -64,20 +22,27 @@ def get_list_of_committed_files():
     return files
 
 
-def checker():
-    """
-    Main function doing the checks
-    """
-    global PYLINT, PYLINT_PARAMS, LIMIT
+def check_repo(
+        limit, pylint='pylint', pylintrc='.pylintrc', pylint_params=None):
+    """ Main function doing the checks
 
+    :type limit: float
+    :param limit: Minimum score to pass the commit
+    :type pylint: str
+    :param pylint: Path to pylint executable
+    :type pylintrc: str
+    :param pylintrc: Path to pylintrc file
+    :type pylint_params: str
+    :param pylint_params: Custom pylint parameters to add to the pylint command
+    """
     # List of checked files and their results
     python_files = []
 
     # Set the exit code
-    exit_code = 0
+    all_filed_passed = True
 
     # Find Python files
-    for filename in get_list_of_committed_files():
+    for filename in _get_list_of_committed_files():
         # Check the file extension
         if filename[-3:] == '.py':
             python_files.append((filename, None))
@@ -90,23 +55,23 @@ def checker():
             if 'python' in first_line and '#!' in first_line:
                 python_files.append((filename, None))
         except IOError:
-            print 'File not found (probably deleted): %s\t\tSKIPPED' % filename
+            print 'File not found (probably deleted): {}\t\tSKIPPED'.format(
+                filename)
 
     # Don't do anything if there are no Python files
     if len(python_files) == 0:
         sys.exit(0)
 
     # Load any pre-commit-hooks options from a .pylintrc file (if there is one)
-
-    if os.path.exists('.pylintrc'):
+    if os.path.exists(pylintrc):
         conf = ConfigParser.SafeConfigParser()
-        conf.read('.pylintrc')
+        conf.read(pylintrc)
         if conf.has_option('pre-commit-hook', 'command'):
-            PYLINT = conf.get('pre-commit-hook', 'command')
+            pylint = conf.get('pre-commit-hook', 'command')
         if conf.has_option('pre-commit-hook', 'params'):
-            PYLINT_PARAMS += ' ' + conf.get('pre-commit-hook', 'params')
+            pylint_params += ' ' + conf.get('pre-commit-hook', 'params')
         if conf.has_option('pre-commit-hook', 'limit'):
-            LIMIT += ' ' + conf.get('pre-commit-hook', 'limit')
+            limit += ' ' + conf.get('pre-commit-hook', 'limit')
 
     # Pylint Python files
     i = 1
@@ -115,8 +80,9 @@ def checker():
         # Allow __init__.py files to be completely empty
         if os.path.basename(python_file) == '__init__.py':
             if os.stat(python_file).st_size == 0:
-                print 'Skipping pylint on %s (empty __init__.py)..\tSKIPPED' % (
-                    python_file)
+                print(
+                    'Skipping pylint on {} (empty __init__.py)..'
+                    '\tSKIPPED'.format(python_file))
 
                 # Bump parsed files
                 i += 1
@@ -126,18 +92,17 @@ def checker():
         score = 0.00
 
         # Start pylinting
-        sys.stdout.write("Running pylint on %s (file %i/%i)..\t" % (
+        sys.stdout.write("Running pylint on {} (file {}/{})..\t".format(
             python_file, i, len(python_files)))
         sys.stdout.flush()
         try:
-            command = [PYLINT]
+            command = [pylint]
 
-            if PYLINT_PARAMS:
-                command += PYLINT_PARAMS.split()
+            if pylint_params:
+                command += pylint_params.split()
 
-            if '--rcfile' not in PYLINT_PARAMS:
-                if os.path.exists('.pylintrc'):
-                    command.append('--rcfile=.pylintrc')
+                if '--rcfile' not in pylint_params:
+                    command.append('--rcfile={}'.format(pylintrc))
 
             command.append(python_file)
 
@@ -146,8 +111,8 @@ def checker():
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE)
             out, _ = proc.communicate()
-        except OSError as err:
-            print "\nAn error occurred. Is pylint installed?"
+        except OSError:
+            print("\nAn error occurred. Is pylint installed?")
             sys.exit(1)
 
         # Check for the result
@@ -158,21 +123,16 @@ def checker():
                 score = float(match.group(1))
 
         # Verify the score
-        if score >= float(LIMIT):
+        if score >= float(limit):
             status = 'PASSED'
         else:
             status = 'FAILED'
-            exit_code = 1
+            all_filed_passed = False
 
         # Add some output
-        print '%.2f/10.00\t%s' % (score, status)
+        print('{:.2}/10.00\t{}'.format(score, status))
 
         # Bump parsed files
         i += 1
 
-    sys.exit(exit_code)
-
-if __name__ == '__main__':
-    checker()
-
-sys.exit(1)
+    return all_filed_passed
