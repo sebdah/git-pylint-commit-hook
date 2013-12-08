@@ -15,7 +15,7 @@ LICENSE:
 import argparse
 import sys
 
-from lib import commit_hook
+from git_pylint_commit_hook import commit_hook
 
 
 def main():
