@@ -10,9 +10,9 @@ By default the script looks in the root directory of your project for a .pylintr
 Installation
 ------------
 
-Download the hook (or just copy it from GitHub) and save it in your Git repo as `.git/hooks/pre-commit`.
+Install via PyPI
 
-Don't forget to make it executable.
+    pip install git-pylint-commit-hook
 
 
 Usage
