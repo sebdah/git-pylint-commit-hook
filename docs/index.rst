@@ -20,6 +20,8 @@ Overview
 
 The ``git-pylint-commit-hook`` is a tool for checking Python code using ``pylint`` before the code is committed to git.
 
+All files that end with ``.py`` or that have ``python`` in the she bang will be automatically checked before they are committed to the repo.
+
 
 Author
 ------
