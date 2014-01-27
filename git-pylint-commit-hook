@@ -12,15 +12,10 @@ LICENSE:
     http://www.apache.org/licenses/LICENSE-2.0.html
 """
 
-import argparse
-import os
-import sys
-from ConfigParser import SafeConfigParser
+VERSION = '2.0.2'
 
-settings = SafeConfigParser()
-settings.read(os.path.join(
-    os.path.dirname(os.path.realpath(__file__)),
-    'git_pylint_commit_hook/settings.conf'))
+import argparse
+import sys
 
 from git_pylint_commit_hook import commit_hook
 
@@ -56,8 +51,7 @@ def main():
     args = parser.parse_args()
 
     if args.version:
-        print('git-pylint-commit-hook version {}'.format(
-            settings.get('general', 'version')))
+        print('git-pylint-commit-hook version {}'.format(VERSION))
         sys.exit(0)
 
     result = commit_hook.check_repo(
