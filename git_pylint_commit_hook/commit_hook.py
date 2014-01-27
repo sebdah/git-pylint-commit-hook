@@ -71,7 +71,7 @@ def check_repo(
         if conf.has_option('pre-commit-hook', 'params'):
             pylint_params += ' ' + conf.get('pre-commit-hook', 'params')
         if conf.has_option('pre-commit-hook', 'limit'):
-            limit += ' ' + conf.get('pre-commit-hook', 'limit')
+            limit = float(conf.get('pre-commit-hook', 'limit'))
 
     # Pylint Python files
     i = 1
@@ -95,25 +95,26 @@ def check_repo(
         sys.stdout.write("Running pylint on {} (file {}/{})..\t".format(
             python_file, i, len(python_files)))
         sys.stdout.flush()
-        try:
-            command = [pylint]
+        #try:
+        command = [pylint]
 
-            if pylint_params:
-                command += pylint_params.split()
+        if pylint_params:
+            command += pylint_params.split()
 
-                if '--rcfile' not in pylint_params:
-                    command.append('--rcfile={}'.format(pylintrc))
+            if '--rcfile' not in pylint_params:
+                command.append('--rcfile={}'.format(pylintrc))
 
-            command.append(python_file)
+        command.append(python_file)
+        print(command)
 
-            proc = subprocess.Popen(
-                command,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE)
-            out, _ = proc.communicate()
-        except OSError:
-            print("\nAn error occurred. Is pylint installed?")
-            sys.exit(1)
+        proc = subprocess.Popen(
+            command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        out, _ = proc.communicate()
+        #except OSError:
+        #    print("\nAn error occurred. Is pylint installed?")
+        #    sys.exit(1)
 
         # Check for the result
         # pylint: disable=E1103
