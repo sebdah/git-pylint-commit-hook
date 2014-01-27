@@ -71,7 +71,7 @@ def check_repo(
         if conf.has_option('pre-commit-hook', 'params'):
             pylint_params += ' ' + conf.get('pre-commit-hook', 'params')
         if conf.has_option('pre-commit-hook', 'limit'):
-            limit += ' ' + conf.get('pre-commit-hook', 'limit')
+            limit = float(conf.get('pre-commit-hook', 'limit'))
 
     # Pylint Python files
     i = 1

@@ -1,15 +1,9 @@
 """ Setup script for PyPI """
-import os
 from setuptools import setup
-from ConfigParser import SafeConfigParser
-
-settings = SafeConfigParser()
-settings.read(os.path.realpath('git_pylint_commit_hook/settings.conf'))
-
 
 setup(
     name='git-pylint-commit-hook',
-    version=settings.get('general', 'version'),
+    version='2.0.2',
     license='Apache License, Version 2.0',
     description='Git commit hook that checks Python files with pylint',
     author='Sebastian Dahlgren',
