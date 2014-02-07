@@ -1,5 +1,5 @@
 """ Commit hook for pylint """
-
+import decimal
 import os
 import re
 import sys
@@ -130,7 +130,7 @@ def check_repo(
             all_filed_passed = False
 
         # Add some output
-        print('{:.2}/10.00\t{}'.format(score, status))
+        print('{:.2}/10.00\t{}'.format(decimal.Decimal(score), status))
 
         # Bump parsed files
         i += 1
