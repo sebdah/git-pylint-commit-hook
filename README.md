@@ -49,6 +49,11 @@ This commit hook is written in Python and has the following requirements:
 Release notes
 -------------
 
+
+### 2.0.3 (2014-02-07)
+
+- Fixed error in decimal representation
+
 ### 2.0.1 (2013-12-08)
 
 - [Added `--version` flag to command line #22https://github.com/sebdah/git-pylint-commit-hook/issues/22]
