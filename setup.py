@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='git-pylint-commit-hook',
-    version='2.0.3',
+    version='2.0.4',
     license='Apache License, Version 2.0',
     description='Git commit hook that checks Python files with pylint',
     author='Sebastian Dahlgren',
@@ -15,7 +15,9 @@ setup(
     scripts=['git-pylint-commit-hook'],
     include_package_data=True,
     zip_safe=False,
-    install_requires=[],
+    install_requires=[
+        'pylint',
+    ],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',
