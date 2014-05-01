@@ -15,7 +15,9 @@ setup(
     scripts=['git-pylint-commit-hook'],
     include_package_data=True,
     zip_safe=False,
-    install_requires=[],
+    install_requires=[
+        'pylint',
+    ],
     classifiers=[
         'Development Status :: 4 - Beta',
         'Environment :: Console',
