@@ -4,15 +4,42 @@ import os
 import re
 import sys
 import subprocess
+import collections
 import ConfigParser
+
+
+ExecutionResult = collections.namedtuple(
+    'ExecutionResult',
+    'status, stdout, stderr'
+)
+
+
+def _execute(cmd):
+    process = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
+    stdout, stderr = process.communicate()
+    status = process.poll()
+    return ExecutionResult(status, stdout, stderr)
+
+
+def _current_commit():
+    if _execute('git rev-parse --verify HEAD'.split()).status:
+        return '4b825dc642cb6eb9a060e54bf8d69288fbee4904'
+    else:
+        return 'HEAD'
 
 
 def _get_list_of_committed_files():
     """ Returns a list of files about to be commited. """
     files = []
     # pylint: disable=E1103
+    diff_index_cmd = 'git diff-index --cached %s' % _current_commit()
     output = subprocess.check_output(
-        'git diff-index --cached HEAD'.split())
+        diff_index_cmd.split()
+    )
     for result in output.split('\n'):
         if result != '':
             result = result.split()
