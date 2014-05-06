@@ -49,6 +49,10 @@ This commit hook is written in Python and has the following requirements:
 Release notes
 -------------
 
+### 2.0.5 (2014-05-06)
+
+- [Make hook work properly on initial commit](https://github.com/sebdah/git-pylint-commit-hook/pull/25). Thanks [@evvers](https://github.com/evvers) for the PR
+
 ### 2.0.4 (2014-05-01)
 
 - [Add pylint to install_requires](https://github.com/sebdah/git-pylint-commit-hook/pull/24). Thanks [@evvers](https://github.com/evvers) for the PR
