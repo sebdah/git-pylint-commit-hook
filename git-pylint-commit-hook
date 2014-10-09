@@ -12,7 +12,7 @@ LICENSE:
     http://www.apache.org/licenses/LICENSE-2.0.html
 """
 
-VERSION = '2.0.2'
+VERSION = '2.0.6'
 
 import argparse
 import sys
