@@ -101,8 +101,8 @@ def check_repo(
             if pylint_params:
                 command += pylint_params.split()
 
-                if '--rcfile' not in pylint_params:
-                    command.append('--rcfile={}'.format(pylintrc))
+            if '--rcfile' not in pylint_params:
+                command.append('--rcfile={}'.format(pylintrc))
 
             command.append(python_file)
 
