@@ -37,6 +37,13 @@ _limit_ is the lowest value which you want to allow for a pylint score.  Any low
 
 Any of these can be bypassed directly in the pre-commit hook itself.  You can also set a different default place to look for the pylintrc file.
 
+Running tests
+-------------
+
+The test suite requires `nose2` to be installed. Install it with `pip install nose2`, then run the tests by executing the following command (in the project root folder):
+
+    nose2
+
 Requirements
 ------------
 
