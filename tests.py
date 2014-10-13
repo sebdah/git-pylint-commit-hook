@@ -69,3 +69,18 @@ class TestHook(unittest.TestCase):
         # Add 'a'
         self.cmd('git add ' + a)
         self.assertEquals(commit_hook._get_list_of_committed_files(), [a])
+
+    def test_is_python_file(self):
+        """Test commit_hook._is_python_file"""
+
+        # Extension
+        a = self.write_file('a.py', '')
+        self.assertTrue(commit_hook._is_python_file(a))
+
+        # Empty
+        a = self.write_file('b', '')
+        self.assertFalse(commit_hook._is_python_file(a))
+
+        # Shebang
+        self.write_file('b', '#!/usr/bin/env python')
+        self.assertTrue(commit_hook._is_python_file(a))
