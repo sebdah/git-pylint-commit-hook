@@ -56,6 +56,16 @@ This commit hook is written in Python and has the following requirements:
 Release notes
 -------------
 
+### 2.0.7 (2014-10-16)
+
+- [2.0.6 fails if pylint params is not set](https://github.com/sebdah/git-pylint-commit-hook/pull/31)
+- [Separate code for testing if a file is Python into a new function](https://github.com/sebdah/git-pylint-commit-hook/pull/30)
+- [Add unit tests for `_current_commit` and `get_list_of_committed_files`](https://github.com/sebdah/git-pylint-commit-hook/pull/29)
+
+### 2.0.5 (2014-10-08)
+
+- [--rcfile=.pylintrc is not added if pylint params is None](https://github.com/sebdah/git-pylint-commit-hook/pull/27)
+
 ### 2.0.5 (2014-05-06)
 
 - [Make hook work properly on initial commit](https://github.com/sebdah/git-pylint-commit-hook/pull/25). Thanks [@evvers](https://github.com/evvers) for the PR
