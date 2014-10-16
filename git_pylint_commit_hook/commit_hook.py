@@ -49,6 +49,21 @@ def _get_list_of_committed_files():
     return files
 
 
+def _is_python_file(filename):
+    """Check if the input file looks like a Python script
+
+    Returns True if the filename ends in ".py" or if the first line
+    contains "python" and "#!", returns False otherwise.
+
+    """
+    if filename.endswith('.py'):
+        return True
+    else:
+        with open(filename, 'r') as file_handle:
+            first_line = file_handle.readline()
+        return 'python' in first_line and '#!' in first_line
+
+
 def check_repo(
         limit, pylint='pylint', pylintrc='.pylintrc', pylint_params=None):
     """ Main function doing the checks
@@ -70,16 +85,8 @@ def check_repo(
 
     # Find Python files
     for filename in _get_list_of_committed_files():
-        # Check the file extension
-        if filename[-3:] == '.py':
-            python_files.append((filename, None))
-            continue
-
-        # Check the first line for a python shebang
         try:
-            with open(filename, 'r') as file_handle:
-                first_line = file_handle.readline()
-            if 'python' in first_line and '#!' in first_line:
+            if _is_python_file(filename):
                 python_files.append((filename, None))
         except IOError:
             print 'File not found (probably deleted): {}\t\tSKIPPED'.format(
