@@ -84,3 +84,12 @@ class TestHook(unittest.TestCase):
         # Shebang
         self.write_file('b', '#!/usr/bin/env python')
         self.assertTrue(commit_hook._is_python_file(a))
+
+    def test_parse_score(self):
+        """Test commit_hook._parse_score"""
+
+        text = 'Your code has been rated at 8.51/10'
+        self.assertEquals(commit_hook._parse_score(text), 8.51)
+
+        text = 'Your code has been rated at 8.51'
+        self.assertEquals(commit_hook._parse_score(text), 0.0)

@@ -64,6 +64,23 @@ def _is_python_file(filename):
         return 'python' in first_line and '#!' in first_line
 
 
+_SCORE_REGEXP = re.compile(
+    r'^Your\ code\ has\ been\ rated\ at\ (\-?[0-9\.]+)/10')
+
+
+def _parse_score(pylint_output):
+    """Parse the score out of pylint's output as a float
+
+    If the score is not found, return 0.0.
+
+    """
+    for line in pylint_output.splitlines():
+        match = re.match(_SCORE_REGEXP, line)
+        if match:
+            return float(match.group(1))
+    return 0.0
+
+
 def check_repo(
         limit, pylint='pylint', pylintrc='.pylintrc', pylint_params=None):
     """ Main function doing the checks
@@ -109,7 +126,6 @@ def check_repo(
 
     # Pylint Python files
     i = 1
-    regexp = re.compile(r'^Your\ code\ has\ been\ rated\ at\ (\-?[0-9\.]+)/10')
     for python_file, score in python_files:
         # Allow __init__.py files to be completely empty
         if os.path.basename(python_file) == '__init__.py':
@@ -121,9 +137,6 @@ def check_repo(
                 # Bump parsed files
                 i += 1
                 continue
-
-        # Set the initial score
-        score = 0.00
 
         # Start pylinting
         sys.stdout.write("Running pylint on {} (file {}/{})..\t".format(
@@ -151,14 +164,8 @@ def check_repo(
             print("\nAn error occurred. Is pylint installed?")
             sys.exit(1)
 
-        # Check for the result
-        # pylint: disable=E1103
-        for line in out.split('\n'):
-            match = re.match(regexp, line)
-            if match:
-                score = float(match.group(1))
-
         # Verify the score
+        score = _parse_score(out)
         if score >= float(limit):
             status = 'PASSED'
         else:
