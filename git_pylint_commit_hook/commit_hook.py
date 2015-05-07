@@ -173,7 +173,12 @@ def check_repo(
             all_filed_passed = False
 
         # Add some output
-        print('{:.2}/10.00\t{}'.format(decimal.Decimal(score), status))
+        if 'FAILED' in status:
+            print('{:.2}/10.00\t{}'.format(decimal.Decimal(score), status))
+            print out
+        else:
+            print('{:.2}/10.00\t{}'.format(decimal.Decimal(score), status))
+
 
         # Bump parsed files
         i += 1
