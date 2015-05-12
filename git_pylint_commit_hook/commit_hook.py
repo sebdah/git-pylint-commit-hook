@@ -174,6 +174,9 @@ def check_repo(
 
         # Add some output
         print('{:.2}/10.00\t{}'.format(decimal.Decimal(score), status))
+        if 'FAILED' in status:
+            print out
+
 
         # Bump parsed files
         i += 1
