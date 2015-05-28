@@ -45,6 +45,10 @@ def main():
         '--pylint-params',
         help='Custom pylint parameters to add to the pylint command')
     parser.add_argument(
+        '--suppress-report',
+        action='store_true',
+        help='Suppress report output if pylint fails')
+    parser.add_argument(
         '--version',
         action='store_true',
         help='Print current version number')
@@ -55,7 +59,7 @@ def main():
         sys.exit(0)
 
     result = commit_hook.check_repo(
-        args.limit, args.pylint, args.pylintrc, args.pylint_params)
+        args.limit, args.pylint, args.pylintrc, args.pylint_params, args.suppress_report)
 
     if result:
         sys.exit(0)
