@@ -82,7 +82,8 @@ def _parse_score(pylint_output):
 
 
 def check_repo(
-        limit, pylint='pylint', pylintrc='.pylintrc', pylint_params=None):
+        limit, pylint='pylint', pylintrc='.pylintrc', pylint_params=None,
+        suppress_report=False):
     """ Main function doing the checks
 
     :type limit: float
@@ -93,6 +94,8 @@ def check_repo(
     :param pylintrc: Path to pylintrc file
     :type pylint_params: str
     :param pylint_params: Custom pylint parameters to add to the pylint command
+    :type suppress_report: bool
+    :param suppress_report: Suppress report if score is below limit
     """
     # List of checked files and their results
     python_files = []
@@ -175,6 +178,13 @@ def check_repo(
         # Add some output
         print('{:.2}/10.00\t{}'.format(decimal.Decimal(score), status))
         if 'FAILED' in status:
+            if suppress_report:
+                command.append('--reports=n')
+                proc = subprocess.Popen(
+                    command,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE)
+                out, _ = proc.communicate()
             print out
 
 
