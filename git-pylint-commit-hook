@@ -1,18 +1,22 @@
 #!/usr/bin/env python
-
+# this is needed because original author chose this executable name
+# pylint: disable=C0103
 """
-Git pre-commit hook for checking Python code quality. The hook requires pylint
-to check the code quality.
+Git pre-commit hook for checking Python code quality.
+
+The hook requires pylint
 
 AUTHOR:
     Sebastian Dahlgren <sebastian.dahlgren@gmail.com>
+    Jyotiswarup Raiturkar <jyotisr5@gmail.com>
+    Michael Kefeder <multiwave.ch>
 
 LICENSE:
     Apache License 2.0
     http://www.apache.org/licenses/LICENSE-2.0.html
 """
 
-VERSION = '2.0.8'
+VERSION = '3.0.0'
 
 import argparse
 import sys
@@ -23,24 +27,25 @@ from git_pylint_commit_hook import commit_hook
 def main():
     """ Main function handling configuration files etc """
     parser = argparse.ArgumentParser(
-        description='Git pylint commit hook')
+        description='Git pylint commit hook',
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument(
         '--limit',
-        default=8.0,
+        default=10.0,
         type=float,
         help=(
             'Score limit, files with a lower score will stop the '
-            'commit. Default: 8.0'))
+            'commit.'))
     parser.add_argument(
         '--pylint',
         default='pylint',
-        help='Path to pylint executable. Default: pylint')
+        help='Path to pylint executable.')
     parser.add_argument(
         '--pylintrc',
         default='.pylintrc',
         help=(
             'Path to pylintrc file. Options in the pylintrc will '
-            'override the command line parameters. Default: .pylintrc'))
+            'override the command line parameters.'))
     parser.add_argument(
         '--pylint-params',
         help='Custom pylint parameters to add to the pylint command')
@@ -58,10 +63,8 @@ def main():
         print('git-pylint-commit-hook version {}'.format(VERSION))
         sys.exit(0)
 
-    result = commit_hook.check_repo(
-        args.limit, args.pylint, args.pylintrc, args.pylint_params, args.suppress_report)
-
-    if result:
+    if commit_hook.check_repo(
+            args.limit, args.pylint, args.pylintrc, args.pylint_params, args.suppress_report):
         sys.exit(0)
     sys.exit(1)
 
