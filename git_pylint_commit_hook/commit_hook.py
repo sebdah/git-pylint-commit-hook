@@ -6,6 +6,7 @@ import re
 import sys
 import subprocess
 import collections
+import tempfile
 try:
     import ConfigParser
 except ImportError:
@@ -140,7 +141,7 @@ def check_repo(
     pylint, pylint_params, limit = _read_config(pylintrc, pylint, pylint_params, limit)
 
     i = 1
-    outfile_fn = '/tmp/pylint_hook_output'
+    outfile_fn = os.path.join(tempfile.gettempdir(), 'pylint_hook_output')
     outfile = open(outfile_fn, 'wb')
     for python_file in python_files.keys():
         # Allow __init__.py files to be completely empty
