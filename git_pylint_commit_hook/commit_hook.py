@@ -7,6 +7,9 @@ import subprocess
 import collections
 import ConfigParser
 
+# Avoid collision with other things called 'pylint'
+import pylint.config as pylint_config
+
 
 ExecutionResult = collections.namedtuple(
     'ExecutionResult',
@@ -82,7 +85,7 @@ def _parse_score(pylint_output):
 
 
 def check_repo(
-        limit, pylint='pylint', pylintrc='.pylintrc', pylint_params=None,
+        limit, pylint='pylint', pylintrc=None, pylint_params=None,
         suppress_report=False):
     """ Main function doing the checks
 
@@ -97,6 +100,10 @@ def check_repo(
     :type suppress_report: bool
     :param suppress_report: Suppress report if score is below limit
     """
+    if pylintrc is None:
+        # If no config is found, use the old default '.pylintrc'
+        pylintrc = pylint_config.find_pylintrc() or '.pylintrc'
+
     # List of checked files and their results
     python_files = []
 
