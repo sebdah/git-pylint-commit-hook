@@ -37,10 +37,10 @@ def main():
         help='Path to pylint executable. Default: pylint')
     parser.add_argument(
         '--pylintrc',
-        default='.pylintrc',
         help=(
             'Path to pylintrc file. Options in the pylintrc will '
-            'override the command line parameters. Default: .pylintrc'))
+            'override the command line parameters. Default: pylint'
+            'search order'))
     parser.add_argument(
         '--pylint-params',
         help='Custom pylint parameters to add to the pylint command')
