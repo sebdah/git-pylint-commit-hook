@@ -1,8 +1,19 @@
 language: python
 python:
-  - "2.7"
-install: pip install nose2
+  - "3.5"
+
+env:
+  - TOXENV=py27
+  - TOXENV=py32
+  - TOXENV=py33
+  - TOXENV=py34
+  - TOXENV=py35
+
+install:
+  - pip install tox
+
 before_script:
   - git config --global user.email "you@example.com"
   - git config --global user.name "Your Name"
-script: nose2
+
+script: tox
