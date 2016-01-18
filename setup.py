@@ -17,6 +17,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'pylint',
+        'future'
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
