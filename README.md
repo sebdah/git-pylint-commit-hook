@@ -56,6 +56,11 @@ This commit hook is written in Python and has the following requirements:
 Release notes
 -------------
 
+### 2.1.0 (2016-01-18)
+
+- [Add Python 3 support](https://github.com/sebdah/git-pylint-commit-hook/pull/40). Thanks [@jAlpedrinha](https://github.com/jAlpedrinha) for the PR
+- [Add tox support](https://github.com/sebdah/git-pylint-commit-hook/pull/40). Thanks [@jAlpedrinha](https://github.com/jAlpedrinha) for the PR
+
 ### 2.0.9 (2014-10-16)
 
 - [Add option to suppress pylint report if score is below limit](https://github.com/sebdah/git-pylint-commit-hook/pull/35). Thanks [@jwkvam](https://github.com/jwkvam) for the PR
