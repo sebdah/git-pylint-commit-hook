@@ -52,6 +52,10 @@ def main():
         '--version',
         action='store_true',
         help='Print current version number')
+    parser.add_argument(
+        '--ignore', dest='ignored_files', action='append',
+        default=[], help='Add regex to blacklist files or directories, '
+        'allowing to avoid running pylint those files.')
     args = parser.parse_args()
 
     if args.version:
@@ -59,7 +63,8 @@ def main():
         sys.exit(0)
 
     result = commit_hook.check_repo(
-        args.limit, args.pylint, args.pylintrc, args.pylint_params, args.suppress_report)
+        args.limit, args.pylint, args.pylintrc, args.pylint_params,
+        args.suppress_report, args.ignored_files)
 
     if result:
         sys.exit(0)
