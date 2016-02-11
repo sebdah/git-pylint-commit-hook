@@ -68,6 +68,14 @@ def _is_python_file(filename):
         return 'python' in first_line and '#!' in first_line
 
 
+def _is_blacklisted(filename, blacklist):
+    for black_regex in blacklist:
+        if re.findall(black_regex, filename):
+            return True
+
+    return False
+
+
 _SCORE_REGEXP = re.compile(
     r'^Your\ code\ has\ been\ rated\ at\ (\-?[0-9\.]+)/10')
 
@@ -87,7 +95,7 @@ def _parse_score(pylint_output):
 
 def check_repo(
         limit, pylint='pylint', pylintrc='.pylintrc', pylint_params=None,
-        suppress_report=False):
+        suppress_report=False, ignored_files=[]):
     """ Main function doing the checks
 
     :type limit: float
@@ -110,7 +118,8 @@ def check_repo(
     # Find Python files
     for filename in _get_list_of_committed_files():
         try:
-            if _is_python_file(filename):
+            if _is_python_file(filename) and not _is_blacklisted(filename,
+                                                                 ignored_files):
                 python_files.append((filename, None))
         except IOError:
             print('File not found (probably deleted): {}\t\tSKIPPED'.format(
