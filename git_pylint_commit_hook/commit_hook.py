@@ -6,6 +6,7 @@ import sys
 import subprocess
 import collections
 import configparser
+import contextlib
 
 ExecutionResult = collections.namedtuple(
     'ExecutionResult',
@@ -34,6 +35,15 @@ def _current_commit():
         return '4b825dc642cb6eb9a060e54bf8d69288fbee4904'
     else:
         return 'HEAD'
+
+
+def _current_stash():
+    res = _execute('git rev-parse -q --verify refs/stash'.split())
+    if res.status:
+        # not really as meaningful for a stash, but makes some sense
+        return '4b825dc642cb6eb9a060e54bf8d69288fbee4904'
+    else:
+        return res.stdout
 
 
 def _get_list_of_committed_files():
@@ -85,6 +95,41 @@ def _parse_score(pylint_output):
     return 0.0
 
 
+@contextlib.contextmanager
+def _stash_unstaged():
+    """Stashes any changes on entry and restores them on exit.
+
+    If there is no initial commit, print a warning and do nothing.
+
+    """
+    if _current_commit() != 'HEAD':
+        # git stash doesn't work with no initial commit, so warn and do nothing
+        print('WARNING: unable to stash changes with no initial commit')
+        yield
+        return
+
+    # git stash still returns 0 if there is nothing to stash,
+    # so inspect the current stash before and after saving
+    original_stash = _current_stash()
+    # leave a message marking the stash as ours in case something goes wrong
+    # so that the user can work out what happened and fix things manually
+    subprocess.check_call('git stash save -q --keep-index '
+                          'git-pylint-commit-hook'.split())
+    new_stash = _current_stash()
+
+    try:
+        # let the caller do whatever they wanted to do
+        # (but we still want to restore the tree if an exception was thrown)
+        yield
+    finally:
+        # only restore if we actually stashed something
+        if original_stash != new_stash:
+            # avoid merge issues
+            subprocess.check_call('git reset --hard -q'.split())
+            # restore everything to how it was
+            subprocess.check_call('git stash pop --index -q'.split())
+
+
 def check_repo(
         limit, pylint='pylint', pylintrc='.pylintrc', pylint_params=None,
         suppress_report=False):
@@ -107,90 +152,92 @@ def check_repo(
     # Set the exit code
     all_filed_passed = True
 
-    # Find Python files
-    for filename in _get_list_of_committed_files():
-        try:
-            if _is_python_file(filename):
-                python_files.append((filename, None))
-        except IOError:
-            print('File not found (probably deleted): {}\t\tSKIPPED'.format(
-                filename))
+    # Stash any unstaged changes while we look at the tree
+    with _stash_unstaged():
+        # Find Python files
+        for filename in _get_list_of_committed_files():
+            try:
+                if _is_python_file(filename):
+                    python_files.append((filename, None))
+            except IOError:
+                print('File not found (probably deleted): {}\t\tSKIPPED'.format(
+                    filename))
 
-    # Don't do anything if there are no Python files
-    if len(python_files) == 0:
-        sys.exit(0)
+        # Don't do anything if there are no Python files
+        if len(python_files) == 0:
+            sys.exit(0)
 
-    # Load any pre-commit-hooks options from a .pylintrc file (if there is one)
-    if os.path.exists(pylintrc):
-        conf = configparser.SafeConfigParser()
-        conf.read(pylintrc)
-        if conf.has_option('pre-commit-hook', 'command'):
-            pylint = conf.get('pre-commit-hook', 'command')
-        if conf.has_option('pre-commit-hook', 'params'):
-            pylint_params += ' ' + conf.get('pre-commit-hook', 'params')
-        if conf.has_option('pre-commit-hook', 'limit'):
-            limit = float(conf.get('pre-commit-hook', 'limit'))
+        # Load any pre-commit-hooks options from a .pylintrc file (if there is one)
+        if os.path.exists(pylintrc):
+            conf = configparser.SafeConfigParser()
+            conf.read(pylintrc)
+            if conf.has_option('pre-commit-hook', 'command'):
+                pylint = conf.get('pre-commit-hook', 'command')
+            if conf.has_option('pre-commit-hook', 'params'):
+                pylint_params += ' ' + conf.get('pre-commit-hook', 'params')
+            if conf.has_option('pre-commit-hook', 'limit'):
+                limit = float(conf.get('pre-commit-hook', 'limit'))
 
-    # Pylint Python files
-    i = 1
-    for python_file, score in python_files:
-        # Allow __init__.py files to be completely empty
-        if os.path.basename(python_file) == '__init__.py':
-            if os.stat(python_file).st_size == 0:
-                print(
-                    'Skipping pylint on {} (empty __init__.py)..'
-                    '\tSKIPPED'.format(python_file))
+        # Pylint Python files
+        i = 1
+        for python_file, score in python_files:
+            # Allow __init__.py files to be completely empty
+            if os.path.basename(python_file) == '__init__.py':
+                if os.stat(python_file).st_size == 0:
+                    print(
+                        'Skipping pylint on {} (empty __init__.py)..'
+                        '\tSKIPPED'.format(python_file))
 
-                # Bump parsed files
-                i += 1
-                continue
+                    # Bump parsed files
+                    i += 1
+                    continue
 
-        # Start pylinting
-        sys.stdout.write("Running pylint on {} (file {}/{})..\t".format(
-            python_file, i, len(python_files)))
-        sys.stdout.flush()
-        try:
-            command = [pylint]
-            if pylint_params:
-                command += pylint_params.split()
-                if '--rcfile' not in pylint_params:
+            # Start pylinting
+            sys.stdout.write("Running pylint on {} (file {}/{})..\t".format(
+                python_file, i, len(python_files)))
+            sys.stdout.flush()
+            try:
+                command = [pylint]
+                if pylint_params:
+                    command += pylint_params.split()
+                    if '--rcfile' not in pylint_params:
+                        command.append('--rcfile={}'.format(pylintrc))
+                else:
                     command.append('--rcfile={}'.format(pylintrc))
-            else:
-                command.append('--rcfile={}'.format(pylintrc))
 
-            command.append(python_file)
-            proc = subprocess.Popen(
-                command,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE)
-
-            out, _ = proc.communicate()
-        except OSError:
-            print("\nAn error occurred. Is pylint installed?")
-            sys.exit(1)
-
-        # Verify the score
-        score = _parse_score(out)
-        if score >= float(limit):
-            status = 'PASSED'
-        else:
-            status = 'FAILED'
-            all_filed_passed = False
-
-        # Add some output
-        print('{:.2}/10.00\t{}'.format(decimal.Decimal(score), status))
-        if 'FAILED' in status:
-            if suppress_report:
-                command.append('--reports=n')
+                command.append(python_file)
                 proc = subprocess.Popen(
                     command,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE)
+
                 out, _ = proc.communicate()
-            print(_futurize_str(out))
+            except OSError:
+                print("\nAn error occurred. Is pylint installed?")
+                sys.exit(1)
+
+            # Verify the score
+            score = _parse_score(out)
+            if score >= float(limit):
+                status = 'PASSED'
+            else:
+                status = 'FAILED'
+                all_filed_passed = False
+
+            # Add some output
+            print('{:.2}/10.00\t{}'.format(decimal.Decimal(score), status))
+            if 'FAILED' in status:
+                if suppress_report:
+                    command.append('--reports=n')
+                    proc = subprocess.Popen(
+                        command,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE)
+                    out, _ = proc.communicate()
+                print(_futurize_str(out))
 
 
-        # Bump parsed files
-        i += 1
+            # Bump parsed files
+            i += 1
 
     return all_filed_passed
