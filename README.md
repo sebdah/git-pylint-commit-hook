@@ -56,6 +56,10 @@ This commit hook is written in Python and has the following requirements:
 Release notes
 -------------
 
+### 2.1.1 (2016-02-26)
+
+- [Stash unstaged changes before running pylint](https://github.com/sebdah/git-pylint-commit-hook/pull/37). Thanks [@evanunderscore](https://github.com/evanunderscore) for the PR
+
 ### 2.1.0 (2016-01-18)
 
 - [Add Python 3 support](https://github.com/sebdah/git-pylint-commit-hook/pull/40). Thanks [@jAlpedrinha](https://github.com/jAlpedrinha) for the PR
