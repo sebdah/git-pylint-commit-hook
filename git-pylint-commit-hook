@@ -43,6 +43,7 @@ def main():
             'override the command line parameters. Default: .pylintrc'))
     parser.add_argument(
         '--pylint-params',
+        default='',
         help='Custom pylint parameters to add to the pylint command')
     parser.add_argument(
         '--suppress-report',
