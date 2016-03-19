@@ -131,7 +131,7 @@ def _stash_unstaged():
 
 
 def check_repo(
-        limit, pylint='pylint', pylintrc='.pylintrc', pylint_params=None,
+        limit, pylint='pylint', pylintrc='.pylintrc', pylint_params='',
         suppress_report=False):
     """ Main function doing the checks
 
