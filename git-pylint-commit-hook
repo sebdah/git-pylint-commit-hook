@@ -12,7 +12,7 @@ LICENSE:
     http://www.apache.org/licenses/LICENSE-2.0.html
 """
 
-VERSION = '2.1.1'
+VERSION = '2.1.2'
 
 import argparse
 import sys
@@ -49,6 +49,10 @@ def main():
         action='store_true',
         help='Suppress report output if pylint fails')
     parser.add_argument(
+        '--always-show-violations',
+        action='store_true',
+        help='Show violations in case of pass as well')
+    parser.add_argument(
         '--version',
         action='store_true',
         help='Print current version number')
@@ -59,7 +63,7 @@ def main():
         sys.exit(0)
 
     result = commit_hook.check_repo(
-        args.limit, args.pylint, args.pylintrc, args.pylint_params, args.suppress_report)
+        args.limit, args.pylint, args.pylintrc, args.pylint_params, args.suppress_report, args.always_show_violations)
 
     if result:
         sys.exit(0)
