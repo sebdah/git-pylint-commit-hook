@@ -221,7 +221,11 @@ def check_repo(
 
             # Verify the score
             score = _parse_score(out)
-            status, all_filed_passed = ('PASSED', True) if score >= float(limit) else ('FAILED', False)
+            if score >= float(limit):
+                status = 'PASSED'
+            else:
+                status = 'FAILED'
+                all_filed_passed = False
 
             # Add some output
             print('{:.2}/10.00\t{}'.format(decimal.Decimal(score), status))
