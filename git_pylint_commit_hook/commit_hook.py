@@ -83,17 +83,17 @@ _SCORE_REGEXP = re.compile(
     r'^Your\ code\ has\ been\ rated\ at\ (\-?[0-9\.]+)/10')
 
 
-def _parse_score(pylint_output):
+def _parse_score(pylint_output, is_file_ignored=False):
     """Parse the score out of pylint's output as a float
 
-    If the score is not found, return 0.0.
+    If the score is not found, return 10.0 in case file is ignored else 0.0.
 
     """
     for line in pylint_output.splitlines():
         match = re.match(_SCORE_REGEXP, _futurize_str(line))
         if match:
             return float(match.group(1))
-    return 0.0
+    return 10.0 if is_file_ignored else 0.0
 
 
 @contextlib.contextmanager
@@ -199,10 +199,18 @@ def check_repo(
             sys.stdout.write("Running pylint on {} (file {}/{})..\t".format(
                 python_file, i, len(python_files)))
             sys.stdout.flush()
+            is_file_ignored = False
             try:
                 command = [pylint]
                 if pylint_params:
-                    command += pylint_params.split()
+                    params = pylint_params.split()
+                    for param in params:
+                        if 'ignore' in param:
+                            ignore_pattern_text = param.split('=')[1]
+                            ignore_pattern = re.compile(r'%s%s' % ('.' if ignore_pattern_text.startswith('*') else '', ignore_pattern_text))
+                            if re.findall(ignore_pattern, python_file):
+                                is_file_ignored = True
+                    command += params
                     if '--rcfile' not in pylint_params:
                         command.append('--rcfile={}'.format(pylintrc))
                 else:
@@ -220,7 +228,7 @@ def check_repo(
                 sys.exit(1)
 
             # Verify the score
-            score = _parse_score(out)
+            score = _parse_score(out, is_file_ignored)
             if score >= float(limit):
                 status = 'PASSED'
             else:
