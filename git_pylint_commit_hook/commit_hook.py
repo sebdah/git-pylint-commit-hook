@@ -96,6 +96,23 @@ def _parse_score(pylint_output):
     return 0.0
 
 
+_IGNORE_REGEXT = re.compile(
+    r'Ignoring entire file \(file\-ignored\)'
+)
+
+
+def _check_ignore(pylint_output):
+    """Check the python file whether ignored
+    If the file is ignored returns True,
+    returns False otherwise
+    """
+    for line in pylint_output.splitlines():
+        match = re.search(_IGNORE_REGEXT, _futurize_str(line))
+        if match:
+            return True
+    return False
+
+
 @contextlib.contextmanager
 def _stash_unstaged():
     """Stashes any changes on entry and restores them on exit.
@@ -221,17 +238,26 @@ def check_repo(
 
             # Verify the score
             score = _parse_score(out)
-            if score >= float(limit):
+            ignored = _check_ignore(out)
+            if ignored:
+                status = 'PASSED'
+            elif score >= float(limit):
                 status = 'PASSED'
             else:
                 status = 'FAILED'
                 all_filed_passed = False
 
             # Add some output
-            print('{:.2}/10.00\t{}'.format(decimal.Decimal(score), status))
+            print('{:.2}/10.00\t{}{}'.format(
+                decimal.Decimal(score),
+                status,
+                ignored and '\tIGNORED' or ''))
+
             status_check_list = ['FAILED']
+
             if always_show_violations:
                 status_check_list.append('PASSED')
+
             if status in status_check_list:
                 if suppress_report:
                     command.append('--reports=n')

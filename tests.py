@@ -1,5 +1,4 @@
 # pylint: disable=missing-docstring
-
 import os
 import shutil
 import subprocess
@@ -189,3 +188,10 @@ class TestHook(unittest.TestCase):
         # Check the file is still unmodified
         with open(a) as f:
             self.assertEquals(f.read(), 'much better :)')
+
+    def test_check_ignore(self):
+        """Test commit_hook._check_ignore"""
+        text = 'I:  1, 0: Ignoring entire file (file-ignored)'
+        self.assertTrue(commit_hook._check_ignore(text))
+        text = 'Your code has been rated at 8.51'
+        self.assertFalse(commit_hook._check_ignore(text))
