@@ -12,12 +12,13 @@ LICENSE:
     http://www.apache.org/licenses/LICENSE-2.0.html
 """
 
-VERSION = '2.1.2'
-
 import argparse
+import os
 import sys
 
 from git_pylint_commit_hook import commit_hook
+
+VERSION = '2.1.1'
 
 
 def main():
@@ -61,6 +62,11 @@ def main():
     if args.version:
         print('git-pylint-commit-hook version {}'.format(VERSION))
         sys.exit(0)
+
+    # Remove the index.lock when it's exists
+
+    if os.path.exists('.git/index.lock'):
+        os.remove('.git/index.lock')
 
     result = commit_hook.check_repo(
         args.limit, args.pylint, args.pylintrc, args.pylint_params, args.suppress_report, args.always_show_violations)
