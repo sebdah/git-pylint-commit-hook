@@ -79,6 +79,13 @@ def _is_python_file(filename):
         return 'python' in first_line and '#!' in first_line
 
 
+def _is_ignored(filename, ignore_pattern_text_list):
+    for ignore_pattern_text in ignore_pattern_text_list:
+        if re.findall(ignore_pattern_text, filename):
+            return True
+    return False
+
+
 _SCORE_REGEXP = re.compile(
     r'^Your\ code\ has\ been\ rated\ at\ (\-?[0-9\.]+)/10')
 
@@ -157,10 +164,18 @@ def check_repo(
 
     # Stash any unstaged changes while we look at the tree
     with _stash_unstaged():
+
+        # Ignore files
+        params = pylint_params.split()
+        ignore_pattern_text_list = []
+        for param in params:
+            if 'ignore' in param:
+                ignore_pattern_text_list.extend(param.split('=')[1].split(','))
+
         # Find Python files
         for filename in _get_list_of_committed_files():
             try:
-                if _is_python_file(filename):
+                if _is_python_file(filename) and not _is_ignored(filename, ignore_pattern_text_list):
                     python_files.append((filename, None))
             except IOError:
                 print('File not found (probably deleted): {}\t\tSKIPPED'.format(
