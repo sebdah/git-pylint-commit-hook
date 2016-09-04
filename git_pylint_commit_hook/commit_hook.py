@@ -109,6 +109,7 @@ def _check_ignore(pylint_output):
         match = re.search(_IGNORE_REGEXT, _futurize_str(line))
         if match:
             return True
+
     return False
 
 
