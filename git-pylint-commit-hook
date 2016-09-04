@@ -64,7 +64,6 @@ def main():
         sys.exit(0)
 
     # Remove the index.lock when it's exists
-
     if os.path.exists('.git/index.lock'):
         os.remove('.git/index.lock')
 
