@@ -64,7 +64,11 @@ def main():
         os.remove('.git/index.lock')
 
     return commit_hook.check_repo(
-        args.limit,args.pylint,args.pylintrc,args.pylint_params,args.suppress_report)
+        args.limit,
+        args.pylint,
+        args.pylintrc,
+        args.pylint_params,
+        args.suppress_report)
 
 if __name__ == '__main__':
     result = main()
