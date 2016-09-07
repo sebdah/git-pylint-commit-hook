@@ -67,15 +67,20 @@ def main():
     if os.path.exists('.git/index.lock'):
         os.remove('.git/index.lock')
 
-    result = commit_hook.check_repo(
-        args.limit, args.pylint, args.pylintrc, args.pylint_params, args.suppress_report, args.always_show_violations)
-
-    if result:
-        sys.exit(0)
-    sys.exit(1)
+    return commit_hook.check_repo(
+        args.limit,
+        args.pylint,
+        args.pylintrc,
+        args.pylint_params,
+        args.suppress_report,
+        args.always_show_violations)
 
 if __name__ == '__main__':
-    main()
+    result = main()
+
+    if not result:
+        sys.exit(1)
+
     sys.exit(0)
 
 sys.exit(1)
