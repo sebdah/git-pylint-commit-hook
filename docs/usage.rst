@@ -24,14 +24,21 @@ Command line options
 The ``git-pylint-commit-hook`` can be configured using command line options. The command line options are:
 ::
 
-    --limit LIMIT         Score limit, files with a lower score will stop the
-                          commit. Default: 8.0
-    --pylint PYLINT       Path to pylint executable. Default: pylint
-    --pylintrc PYLINTRC   Path to pylintrc file. Options in the pylintrc will
-                          override the command line parameters. Default:
-                          .pylintrc
-    --pylint-params PYLINT_PARAMS
-                          Custom pylint parameters to add to the pylint command
+      --limit LIMIT         Score limit, files with a lower score will stop the
+                            commit. Default: 8.0
+      --pylint PYLINT       Path to pylint executable. Default: pylint
+      --pylintrc PYLINTRC   Path to pylintrc file. Options in the pylintrc will
+                            override the command line parameters. Default:
+                            pylintsearch order
+      --pylint-params PYLINT_PARAMS
+                            Custom pylint parameters to add to the pylint command
+      --suppress-report     Suppress report output if pylint fails
+      --always-show-violations
+                            Show violations in case of pass as well
+      --version             Print current version number
+      --ignore IGNORED_FILES
+                            Add regex to blacklist files or directories, allowing
+                            to avoid running pylint those files.
 
 You can simply append those to the command created in the **Basic configuration** above.
 
@@ -39,13 +46,13 @@ You can simply append those to the command created in the **Basic configuration*
 Support for ``.pylintrc`` files
 -------------------------------
 
-``git-pylint-commit-hook`` will automatically find your ``.pylintrc`` file if you have one in you project's root directory. Any configuration defined in this file will be used in the ``git-pylint-commit-hook``.
+``git-pylint-commit-hook`` will automatically find your pylint configuration files, according to the pylint configuration file default read order. Any configuration found for the project will be used in the ``git-pylint-commit-hook``.
 
-You can also define a custom ``.pylintrc`` file using the ``--pylintrc`` command line option.
+You can also define a custom pylint configuration file using the ``--pylintrc`` command line option.
 
 
-``.pylintrc`` configuration
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Git configuration
+^^^^^^^^^^^^^^^^^
 
 Settings are loaded by default from the ``.pylintrc`` file in the root of your repo.
 ::
