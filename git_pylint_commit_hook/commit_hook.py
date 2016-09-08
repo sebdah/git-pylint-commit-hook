@@ -150,9 +150,26 @@ def _stash_unstaged():
             subprocess.check_call('git stash pop --index -q'.split())
 
 
+def _is_ignored(filename, ignored_paths):
+    """ Check if the file should be ignored
+
+    :type filename: str
+    :param filename: Name of file check
+    :type ignored_paths: list
+    :param ignored_paths:
+        List of regular expressions we should validate against
+    :returns: bool -- True if the file should be ignored
+    """
+    for ignored_path in ignored_paths:
+        if re.findall(ignored_path, filename):
+            return True
+
+    return False
+
+
 def check_repo(
         limit, pylint='pylint', pylintrc='.pylintrc', pylint_params='',
-        suppress_report=False, always_show_violations=False):
+        suppress_report=False, always_show_violations=False, ignored_files=[]):
     """ Main function doing the checks
 
     :type limit: float
@@ -167,6 +184,8 @@ def check_repo(
     :param suppress_report: Suppress report if score is below limit
     :type always_show_violations: bool
     :param always_show_violations: Show violations in case of pass as well
+    :type ignored_files: list
+    :param ignored_files: List of files to exclude from the validation
     """
     # List of checked files and their results
     python_files = []
@@ -179,7 +198,8 @@ def check_repo(
         # Find Python files
         for filename in _get_list_of_committed_files():
             try:
-                if _is_python_file(filename):
+                if _is_python_file(filename) and \
+                    not _is_ignored(filename, ignored_files):
                     python_files.append((filename, None))
             except IOError:
                 print('File not found (probably deleted): {}\t\tSKIPPED'.format(
