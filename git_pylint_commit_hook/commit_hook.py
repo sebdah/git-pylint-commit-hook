@@ -13,6 +13,7 @@ ExecutionResult = collections.namedtuple(
     'status, stdout, stderr'
 )
 
+
 def _futurize_str(obj):
     if isinstance(obj, bytes):
         obj = obj.decode('utf-8')
@@ -150,7 +151,7 @@ def _stash_unstaged():
 
 def check_repo(
         limit, pylint='pylint', pylintrc='.pylintrc', pylint_params=None,
-        suppress_report=False):
+        suppress_report=False, always_show_violations=False):
     """ Main function doing the checks
 
     :type limit: float
@@ -163,6 +164,8 @@ def check_repo(
     :param pylint_params: Custom pylint parameters to add to the pylint command
     :type suppress_report: bool
     :param suppress_report: Suppress report if score is below limit
+    :type always_show_violations: bool
+    :param always_show_violations: Show violations in case of pass as well
     """
     # List of checked files and their results
     python_files = []
@@ -247,9 +250,16 @@ def check_repo(
 
             # Add some output
             print('{:.2}/10.00\t{}{}'.format(
-                decimal.Decimal(score), status, ignored and '\tIGNORED' or ''
-            ))
-            if 'FAILED' in status:
+                decimal.Decimal(score),
+                status,
+                ignored and '\tIGNORED' or ''))
+
+            status_check_list = ['FAILED']
+
+            if always_show_violations:
+                status_check_list.append('PASSED')
+
+            if status in status_check_list:
                 if suppress_report:
                     command.append('--reports=n')
                     proc = subprocess.Popen(
@@ -257,8 +267,8 @@ def check_repo(
                         stdout=subprocess.PIPE,
                         stderr=subprocess.PIPE)
                     out, _ = proc.communicate()
-                print(_futurize_str(out))
 
+                print(_futurize_str(out))
 
             # Bump parsed files
             i += 1
