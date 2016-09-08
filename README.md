@@ -6,7 +6,7 @@ git-pylint-commit-hook
 
 Pre-commit hook for Git checking Python code quality. The hook will check files ending with `.py` or that has a she bang (#!) containing `python`.
 
-By default the script looks in the root directory of your project for a .pylintrc file, which it passes to pylint.  It also looks for a [pre-commit-hook] section for options of it's own.
+The script will try to find pylint configuration files in the order determined by pylint. It also looks for a [pre-commit-hook] section in the pylint configuration for commit hook specific options.
 
 Installation
 ------------

@@ -51,8 +51,8 @@ Support for ``.pylintrc`` files
 You can also define a custom pylint configuration file using the ``--pylintrc`` command line option.
 
 
-Git configuration
-^^^^^^^^^^^^^^^^^
+pylint configuration
+^^^^^^^^^^^^^^^^^^^^
 
 Settings are loaded by default from the ``.pylintrc`` file in the root of your repo.
 ::
