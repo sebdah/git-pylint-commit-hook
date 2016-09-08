@@ -8,6 +8,7 @@ import sys
 import subprocess
 
 import configparser
+import pylint.config as pylint_config
 
 ExecutionResult = collections.namedtuple(
     'ExecutionResult',
@@ -168,7 +169,7 @@ def _is_ignored(filename, ignored_paths):
 
 
 def check_repo(
-        limit, pylint='pylint', pylintrc='.pylintrc', pylint_params='',
+        limit, pylint='pylint', pylintrc=None, pylint_params='',
         suppress_report=False, always_show_violations=False, ignored_files=[]):
     """ Main function doing the checks
 
@@ -192,6 +193,10 @@ def check_repo(
 
     # Set the exit code
     all_filed_passed = True
+
+    if pylintrc is None:
+         # If no config is found, use the old default '.pylintrc'
+         pylintrc = pylint_config.find_pylintrc() or '.pylintrc'
 
     # Stash any unstaged changes while we look at the tree
     with _stash_unstaged():
