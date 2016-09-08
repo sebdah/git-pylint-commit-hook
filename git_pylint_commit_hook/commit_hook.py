@@ -1,12 +1,13 @@
 """ Commit hook for pylint """
+import collections
+import contextlib
 import decimal
 import os
 import re
 import sys
 import subprocess
-import collections
+
 import configparser
-import contextlib
 
 ExecutionResult = collections.namedtuple(
     'ExecutionResult',
