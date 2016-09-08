@@ -1,3 +1,4 @@
+
 git-pylint-commit-hook
 ======================
 
@@ -55,6 +56,14 @@ This commit hook is written in Python and has the following requirements:
 
 Release notes
 -------------
+
+### 2.2.0 (2016-09-08)
+- Add support for Python 3.5
+- [Support for showing pylint violations in case of passing of limit](https://github.com/sebdah/git-pylint-commit-hook/pull/48). Contributed by [@sandipagarwal](https://github.com/sandipagarwal)
+- [Use pylints config file read order](https://github.com/sebdah/git-pylint-commit-hook/pull/39). Contributed by [@evanunderscore](https://github.com/evanunderscore)
+- [Fix multiple git process problem](https://github.com/sebdah/git-pylint-commit-hook/pull/51). Thank you [@lagelalegal](https://github.com/lagelalegal) for providing a fix.
+- [Add flag for ignoring certain files](https://github.com/sebdah/git-pylint-commit-hook/pull/41). Thanks [@thiblahute](https://github.com/thiblahute) for the contribution
+- Some refactor and bug fixes
 
 ### 2.1.1 (2016-02-26)
 
