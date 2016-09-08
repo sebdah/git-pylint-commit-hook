@@ -48,10 +48,9 @@ The test suite requires `nose2` to be installed. Install it with `pip install no
 Requirements
 ------------
 
-This commit hook is written in Python and has the following requirements:
+This project supports Python 2.7 and Python 3.5. Please install other requirements via
 
-- [pylint](http://www.logilab.org/857) (`sudo pip install pylint`)
-- Python 2.7 or 3.5
+	pip install -r requirements.txt
 
 
 Release notes
