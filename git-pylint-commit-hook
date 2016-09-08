@@ -58,6 +58,13 @@ def main():
         '--version',
         action='store_true',
         help='Print current version number')
+    parser.add_argument(
+        '--ignore',
+        dest='ignored_files', action='append',
+        default=[],
+        help=(
+            'Add regex to blacklist files or directories, '
+            'allowing to avoid running pylint those files.'))
     args = parser.parse_args()
 
     if args.version:
@@ -74,7 +81,8 @@ def main():
         args.pylintrc,
         args.pylint_params,
         args.suppress_report,
-        args.always_show_violations)
+        args.always_show_violations,
+        args.ignored_files)
 
 if __name__ == '__main__':
     result = main()
