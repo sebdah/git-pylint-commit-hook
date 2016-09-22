@@ -13,7 +13,7 @@ LICENSE:
 """
 
 import argparse
-import os
+# import os
 import sys
 
 from git_pylint_commit_hook import commit_hook
@@ -72,8 +72,8 @@ def main():
         sys.exit(0)
 
     # Remove the index.lock when it's exists
-    if os.path.exists('.git/index.lock'):
-        os.remove('.git/index.lock')
+    # if os.path.exists('.git/index.lock'):
+    #     os.remove('.git/index.lock')
 
     return commit_hook.check_repo(
         args.limit,
