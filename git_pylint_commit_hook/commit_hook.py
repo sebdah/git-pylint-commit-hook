@@ -170,7 +170,7 @@ def _is_ignored(filename, ignored_paths):
 
 def check_repo(
         limit, pylint='pylint', pylintrc=None, pylint_params='',
-        suppress_report=False, always_show_violations=False, ignored_files=[]):
+        suppress_report=False, always_show_violations=False, ignored_files=None):
     """ Main function doing the checks
 
     :type limit: float
@@ -188,6 +188,10 @@ def check_repo(
     :type ignored_files: list
     :param ignored_files: List of files to exclude from the validation
     """
+    # Lists are mutable and should not be assigned in function arguments
+    if ignored_files is None:
+        ignored_files = []
+
     # List of checked files and their results
     python_files = []
 
@@ -195,16 +199,15 @@ def check_repo(
     all_filed_passed = True
 
     if pylintrc is None:
-         # If no config is found, use the old default '.pylintrc'
-         pylintrc = pylint_config.find_pylintrc() or '.pylintrc'
+        # If no config is found, use the old default '.pylintrc'
+        pylintrc = pylint_config.find_pylintrc() or '.pylintrc'
 
     # Stash any unstaged changes while we look at the tree
     with _stash_unstaged():
         # Find Python files
         for filename in _get_list_of_committed_files():
             try:
-                if _is_python_file(filename) and \
-                    not _is_ignored(filename, ignored_files):
+                if _is_python_file(filename) and not _is_ignored(filename, ignored_files):
                     python_files.append((filename, None))
             except IOError:
                 print('File not found (probably deleted): {}\t\tSKIPPED'.format(
@@ -266,9 +269,7 @@ def check_repo(
             # Verify the score
             score = _parse_score(out)
             ignored = _check_ignore(out)
-            if ignored:
-                status = 'PASSED'
-            elif score >= float(limit):
+            if ignored or score >= float(limit):
                 status = 'PASSED'
             else:
                 status = 'FAILED'
