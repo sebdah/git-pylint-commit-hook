@@ -56,6 +56,9 @@ This project supports Python 2.7 and Python 3.5. Please install other requiremen
 Release notes
 -------------
 
+### 2.2.1 (2016-09-27)
+- [Correct index.lock file deletion and other fixes & formatting](https://github.com/sebdah/git-pylint-commit-hook/pull/52). Thanks to [@sandipagarwal](https://github.com/sandipagarwal) for this bug fix
+
 ### 2.2.0 (2016-09-08)
 - Add support for Python 3.5
 - [Support for showing pylint violations in case of passing of limit](https://github.com/sebdah/git-pylint-commit-hook/pull/48). Contributed by [@sandipagarwal](https://github.com/sandipagarwal)
