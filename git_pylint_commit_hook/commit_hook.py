@@ -207,7 +207,8 @@ def check_repo(
         # Find Python files
         for filename in _get_list_of_committed_files():
             try:
-                if _is_python_file(filename) and not _is_ignored(filename, ignored_files):
+                if _is_python_file(filename) and \
+                        not _is_ignored(filename, ignored_files):
                     python_files.append((filename, None))
             except IOError:
                 print('File not found (probably deleted): {}\t\tSKIPPED'.format(
