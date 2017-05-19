@@ -216,7 +216,7 @@ def check_repo(
 
         # Don't do anything if there are no Python files
         if len(python_files) == 0:
-            sys.exit(0)
+            return True
 
         # Load any pre-commit-hooks options from a .pylintrc file (if there is one)
         if os.path.exists(pylintrc):
@@ -265,7 +265,7 @@ def check_repo(
                 out, _ = proc.communicate()
             except OSError:
                 print("\nAn error occurred. Is pylint installed?")
-                sys.exit(1)
+                return False
 
             # Verify the score
             score = _parse_score(out)
