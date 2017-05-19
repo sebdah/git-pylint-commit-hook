@@ -56,6 +56,9 @@ This project supports Python 2.7 and Python 3.5. Please install other requiremen
 Release notes
 -------------
 
+### 2.2.2 (2017-05-19)
+- Let the wrapper script call `sys.exit` [#55](https://github.com/sebdah/git-pylint-commit-hook/pull/55) contributed by [coldnight](https://github.com/coldnight)
+
 ### 2.2.1 (2016-09-27)
 - [Correct index.lock file deletion and other fixes & formatting](https://github.com/sebdah/git-pylint-commit-hook/pull/52). Thanks to [@sandipagarwal](https://github.com/sandipagarwal) for this bug fix
 
