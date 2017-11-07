@@ -39,6 +39,9 @@ The ``git-pylint-commit-hook`` can be configured using command line options. The
       --ignore IGNORED_FILES
                             Add regex to blacklist files or directories, allowing
                             to avoid running pylint those files.
+      --stash               Stash any unstaged changes while linting (changes are
+                            unstashed automatically unless the process is forcibly
+                            killed)
 
 You can simply append those to the command created in the **Basic configuration** above.
 
