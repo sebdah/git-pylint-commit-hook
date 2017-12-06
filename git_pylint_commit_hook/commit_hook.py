@@ -99,7 +99,7 @@ def _parse_score(pylint_output):
 
 
 _IGNORE_REGEXT = re.compile(
-    r'Ignoring entire file \(file\-ignored\)'
+    r'(Ignoring entire file \(file\-ignored\))|(^0 statements analysed.)'
 )
 
 

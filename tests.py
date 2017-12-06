@@ -195,3 +195,17 @@ class TestHook(unittest.TestCase):
         self.assertTrue(commit_hook._check_ignore(text))
         text = 'Your code has been rated at 8.51'
         self.assertFalse(commit_hook._check_ignore(text))
+        text = '''Report
+======
+0 statements analysed.
+
+Statistics by type
+------------------'''
+        self.assertTrue(commit_hook._check_ignore(text))
+        text = '''Report
+======
+100 statements analysed.
+
+Statistics by type
+------------------'''
+        self.assertFalse(commit_hook._check_ignore(text))
