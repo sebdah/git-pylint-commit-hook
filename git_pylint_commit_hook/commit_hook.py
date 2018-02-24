@@ -99,7 +99,7 @@ def _parse_score(pylint_output):
 
 
 _IGNORE_REGEXT = re.compile(
-    r'Ignoring entire file \(file\-ignored\)'
+    r'(Ignoring entire file \(file\-ignored\))|(^0 statements analysed.)'
 )
 
 
@@ -136,7 +136,9 @@ def _stash_unstaged():
     # so that the user can work out what happened and fix things manually
     subprocess.check_call('git stash save -q --keep-index '
                           'git-pylint-commit-hook'.split())
-    new_stash = _current_stash()
+    stashed = original_stash != _current_stash()
+    if stashed:
+        print('Unstaged changes were detected and stashed')
 
     try:
         # let the caller do whatever they wanted to do
@@ -144,11 +146,18 @@ def _stash_unstaged():
         yield
     finally:
         # only restore if we actually stashed something
-        if original_stash != new_stash:
+        if stashed:
+            print('Restoring stashed changes')
             # avoid merge issues
             subprocess.check_call('git reset --hard -q'.split())
             # restore everything to how it was
             subprocess.check_call('git stash pop --index -q'.split())
+
+
+@contextlib.contextmanager
+def _noop():
+    """A context manager that does nothing."""
+    yield
 
 
 def _is_ignored(filename, ignored_paths):
@@ -170,7 +179,8 @@ def _is_ignored(filename, ignored_paths):
 
 def check_repo(
         limit, pylint='pylint', pylintrc=None, pylint_params='',
-        suppress_report=False, always_show_violations=False, ignored_files=None):
+        suppress_report=False, always_show_violations=False,
+        ignored_files=None, stash=False):
     """ Main function doing the checks
 
     :type limit: float
@@ -187,6 +197,8 @@ def check_repo(
     :param always_show_violations: Show violations in case of pass as well
     :type ignored_files: list
     :param ignored_files: List of files to exclude from the validation
+    :type stash: bool
+    :param stash: Stash any unstaged changes while linting
     """
     # Lists are mutable and should not be assigned in function arguments
     if ignored_files is None:
@@ -202,8 +214,13 @@ def check_repo(
         # If no config is found, use the old default '.pylintrc'
         pylintrc = pylint_config.find_pylintrc() or '.pylintrc'
 
-    # Stash any unstaged changes while we look at the tree
-    with _stash_unstaged():
+    if stash:
+        maybe_stash_unstaged = _stash_unstaged
+    else:
+        maybe_stash_unstaged = _noop
+
+    # Optionally stash any unstaged changes while we look at the tree
+    with maybe_stash_unstaged():
         # Find Python files
         for filename in _get_list_of_committed_files():
             try:

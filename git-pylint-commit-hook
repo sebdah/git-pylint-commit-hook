@@ -17,7 +17,7 @@ import sys
 
 from git_pylint_commit_hook import commit_hook
 
-VERSION = '2.2.2'
+VERSION = '2.3.0'
 
 
 def main():
@@ -64,6 +64,12 @@ def main():
         help=(
             'Add regex to blacklist files or directories, '
             'allowing to avoid running pylint those files.'))
+    parser.add_argument(
+        '--stash',
+        action='store_true',
+        help='Stash any unstaged changes while linting '
+             '(changes are unstashed automatically '
+             'unless the process is forcibly killed) ')
     args = parser.parse_args()
 
     if args.version:
@@ -77,7 +83,8 @@ def main():
         args.pylint_params,
         args.suppress_report,
         args.always_show_violations,
-        args.ignored_files)
+        args.ignored_files,
+        args.stash)
 
 if __name__ == '__main__':
     result = main()
