@@ -56,6 +56,10 @@ This project supports Python 2.7 and Python 3.5. Please install other requiremen
 Release notes
 -------------
 
+### 2.3.0 (2018-02-24)
+- Make stashing optional [#56](https://github.com/sebdah/git-pylint-commit-hook/pull/56)
+- Bug fix for pylinit 1.7.x [#57](https://github.com/sebdah/git-pylint-commit-hook/pull/57)
+
 ### 2.2.2 (2017-05-19)
 - Let the wrapper script call `sys.exit` [#55](https://github.com/sebdah/git-pylint-commit-hook/pull/55) contributed by [coldnight](https://github.com/coldnight)
 
