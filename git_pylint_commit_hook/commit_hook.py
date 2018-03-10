@@ -1,4 +1,6 @@
 """ Commit hook for pylint """
+from __future__ import print_function
+
 import collections
 import contextlib
 import decimal
@@ -36,8 +38,7 @@ def _execute(cmd):
 def _current_commit():
     if _execute('git rev-parse --verify HEAD'.split()).status:
         return '4b825dc642cb6eb9a060e54bf8d69288fbee4904'
-    else:
-        return 'HEAD'
+    return 'HEAD'
 
 
 def _current_stash():
@@ -45,8 +46,7 @@ def _current_stash():
     if res.status:
         # not really as meaningful for a stash, but makes some sense
         return '4b825dc642cb6eb9a060e54bf8d69288fbee4904'
-    else:
-        return res.stdout
+    return res.stdout
 
 
 def _get_list_of_committed_files():
@@ -75,10 +75,9 @@ def _is_python_file(filename):
     """
     if filename.endswith('.py'):
         return True
-    else:
-        with open(filename, 'r') as file_handle:
-            first_line = file_handle.readline()
-        return 'python' in first_line and '#!' in first_line
+    with open(filename, 'r') as file_handle:
+        first_line = file_handle.readline()
+    return 'python' in first_line and '#!' in first_line
 
 
 _SCORE_REGEXP = re.compile(
@@ -232,7 +231,7 @@ def check_repo(
                     filename))
 
         # Don't do anything if there are no Python files
-        if len(python_files) == 0:
+        if not python_files:
             return True
 
         # Load any pre-commit-hooks options from a .pylintrc file (if there is one)
