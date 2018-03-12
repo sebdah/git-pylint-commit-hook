@@ -56,6 +56,9 @@ This project supports Python 2.7 and Python 3.5. Please install other requiremen
 Release notes
 -------------
 
+### 2.4.0 (2018-03-12)
+- Skip `pylintrc` parameter, if file not present [#62](https://github.com/sebdah/git-pylint-commit-hook/issues/62)
+
 ### 2.3.0 (2018-02-24)
 - Make stashing optional [#56](https://github.com/sebdah/git-pylint-commit-hook/pull/56)
 - Bug fix for pylinit 1.7.x [#57](https://github.com/sebdah/git-pylint-commit-hook/pull/57)
