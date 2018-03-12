@@ -245,6 +245,8 @@ def check_repo(
                 pylint_params += ' ' + conf.get('pre-commit-hook', 'params')
             if conf.has_option('pre-commit-hook', 'limit'):
                 limit = float(conf.get('pre-commit-hook', 'limit'))
+        else:
+            pylintrc = None
 
         # Pylint Python files
         i = 1
@@ -269,9 +271,11 @@ def check_repo(
                 if pylint_params:
                     command += pylint_params.split()
                     if '--rcfile' not in pylint_params:
-                        command.append('--rcfile={}'.format(pylintrc))
+                        if pylintrc:
+                            command.append('--rcfile={}'.format(pylintrc))
                 else:
-                    command.append('--rcfile={}'.format(pylintrc))
+                    if pylintrc:
+                       command.append('--rcfile={}'.format(pylintrc))
 
                 command.append(python_file)
                 proc = subprocess.Popen(
