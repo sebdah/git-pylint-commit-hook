@@ -274,7 +274,7 @@ def check_repo(
                             command.append('--rcfile={}'.format(pylintrc))
                 else:
                     if pylintrc:
-                       command.append('--rcfile={}'.format(pylintrc))
+                        command.append('--rcfile={}'.format(pylintrc))
 
                 command.append(python_file)
                 proc = subprocess.Popen(
@@ -292,6 +292,9 @@ def check_repo(
             ignored = _check_ignore(out)
             if ignored or score >= float(limit):
                 status = 'PASSED'
+            elif not out and not proc.returncode:
+                # pylint produced no output but also no errors
+                status = 'SKIPPED'
             else:
                 status = 'FAILED'
                 all_filed_passed = False
