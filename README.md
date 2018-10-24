@@ -56,6 +56,9 @@ This project supports Python 2.7 and Python 3.5. Please install other requiremen
 Release notes
 -------------
 
+### 2.5.1 (2018-10-24)
+- Check if a file is ignored before checking if it's a python file [#69](https://github.com/sebdah/git-pylint-commit-hook/pull/69)
+
 ### 2.5.0 (2018-07-27)
 - Don't fail files with `pylint: skip-file` [#66](https://github.com/sebdah/git-pylint-commit-hook/pull/66)
 
