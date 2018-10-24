@@ -2,8 +2,8 @@ gen-docs:
 	pip install -r docs/requirements.txt
 	cd docs; make html
 install:
-	python setup.py build
-	python setup.py install
+	python3 setup.py build
+	python3 setup.py install
 release:
-	python setup.py register
-	python setup.py sdist upload
+	python3 setup.py register
+	python3 setup.py sdist upload
