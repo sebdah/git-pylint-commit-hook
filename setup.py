@@ -8,7 +8,7 @@ setup(
     description='Git commit hook that checks Python files with pylint',
     author='Sebastian Dahlgren',
     author_email='sebastian.dahlgren@gmail.com',
-    url='http://www.sebastiandahlgren.se',
+    url='https://github.com/sebdah/git-pylint-commit-hook',
     keywords="git commit pre-commit hook pylint python",
     platforms=['Any'],
     packages=['git_pylint_commit_hook'],
