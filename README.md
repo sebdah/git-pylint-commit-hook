@@ -56,6 +56,10 @@ This project supports Python 2.7 and Python 3.5. Please install other requiremen
 Release notes
 -------------
 
+### 2.6.0 (2022-02-13)
+- Skip binary files [#76](https://github.com/sebdah/git-pylint-commit-hook/pull/76)
+- Fix PyPI project URL [#74](https://github.com/sebdah/git-pylint-commit-hook/pull/74)
+
 ### 2.5.1 (2018-10-24)
 - Check if a file is ignored before checking if it's a python file [#69](https://github.com/sebdah/git-pylint-commit-hook/pull/69)
 
