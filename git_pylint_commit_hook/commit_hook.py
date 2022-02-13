@@ -75,9 +75,12 @@ def _is_python_file(filename):
     """
     if filename.endswith('.py'):
         return True
-    with open(filename, 'r') as file_handle:
-        first_line = file_handle.readline()
-    return 'python' in first_line and '#!' in first_line
+    try:
+        with open(filename, 'r') as file_handle:
+            first_line = file_handle.readline()
+        return 'python' in first_line and '#!' in first_line
+    except UnicodeDecodeError:
+        return False
 
 
 _SCORE_REGEXP = re.compile(
