@@ -1,5 +1,5 @@
 gen-docs:
-	pip install -r docs/requirements.txt
+	pip3 install -r docs/requirements.txt
 	cd docs; make html
 install:
 	python3 setup.py build
