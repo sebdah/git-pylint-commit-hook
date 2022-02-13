@@ -17,7 +17,7 @@ import sys
 
 from git_pylint_commit_hook import commit_hook
 
-VERSION = '2.4.0'
+VERSION = '2.6.0'
 
 
 def main():
