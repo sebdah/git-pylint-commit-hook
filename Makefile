@@ -1,9 +1,9 @@
 gen-docs:
 	pip3 install -r docs/requirements.txt
 	cd docs; make html
-install:
-	python3 setup.py build
-	python3 setup.py install
+build:
+	python3 -m pip install --upgrade build
+	python3 -m build
 release:
-	python3 setup.py register
-	python3 setup.py sdist upload
+	python3 -m pip install --upgrade twine
+	python3 -m twine upload dist/*
