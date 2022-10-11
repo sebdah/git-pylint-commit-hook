@@ -16,7 +16,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'pylint',
+        'pylint<2.7',
         'future'
     ],
     classifiers=[
@@ -26,4 +26,5 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python'
     ]
+    python_requires='>=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <=3.6',
 )
